@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public abstract class ModelRecord {
     //Following fields are immutable.
-    private final int id;
+    private Integer id;
     private final Date createDate;
     private final String createdBy;
 
@@ -24,7 +24,7 @@ public abstract class ModelRecord {
     }
 
     public ModelRecord(String name, String creator) {
-        this.id = Integer.parseInt(null);
+        this.id = null;
         this.name = name;
         this.createdBy = creator;
         this.createDate = new Date(System.currentTimeMillis());
@@ -61,6 +61,11 @@ public abstract class ModelRecord {
     }
     public String getName(){
         return this.name;
+    }
+
+    //Temporary helper method delete
+    public void setId(int id){
+        this.id = id;
     }
 
 }

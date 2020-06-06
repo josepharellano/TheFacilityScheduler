@@ -7,5 +7,8 @@ public class Address extends ModelRecord {
     public Address(int id, String name, Date createDate, String creator, Timestamp lastUpdate, String lastUpdateBy) {
         super(id, name, createDate, creator, lastUpdate, lastUpdateBy);
     }
+    public Address(String name, String creator){
+        super(name,creator);
 
+    }
 }
