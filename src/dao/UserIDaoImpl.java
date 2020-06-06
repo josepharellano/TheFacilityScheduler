@@ -29,27 +29,20 @@ public class UserIDaoImpl implements IDao<User> {
         try (Connection conn = DBConnection.startConnection()) {
 
             //Set Statement
-            PreparedStatement ps = DBQuery.setPreparedStatement(conn,INSERT_USERS_SQL);
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn, INSERT_USERS_SQL);
 
             //Build Query
-            ps.setString(0,record.getName());
-            ps.setString(1,record.getPassword());
-            ps.setBoolean(2, record.getIsActive());
-            ps.setDate(3, record.getCreateDate());
-            ps.setString(4,record.getCreatedBy());
-            ps.setTimestamp(5, record.getLastUpdate());
-            ps.setString(6,record.getLastUpdateBy());
+            ps.setString(1, record.getName());
+            ps.setString(2, record.getPassword());
+            ps.setBoolean(3, record.getIsActive());
+            ps.setDate(4, record.getCreateDate());
+            ps.setString(5, record.getCreatedBy());
+            ps.setTimestamp(6, record.getLastUpdate());
+            ps.setString(7, record.getLastUpdateBy());
 
             //Make Query
             DBQuery.makeQuery();
-
-            //Query is a success
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-
-        //Close connection
-        DBConnection.closeConnection();
     }
 
     @Override

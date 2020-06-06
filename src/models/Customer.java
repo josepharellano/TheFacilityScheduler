@@ -22,4 +22,13 @@ public class Customer extends  ModelRecord{
         this.address = address;
         this.isActive = true;
     }
+
+    //Getters
+    public Address getAddress(){
+        return this.address;
+    }
+
+    public boolean isActive(){
+        return this.isActive;
+    }
 }
