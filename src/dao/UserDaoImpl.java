@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object implementation for a User Model.
+ * @author Joseph Arellano
+ */
 public class UserDaoImpl implements DaoInterface<User> {
 
     //Insert Statement
@@ -20,7 +24,7 @@ public class UserDaoImpl implements DaoInterface<User> {
     /**
      * Inserts a user object into the user database
      * @param record user object being inserted into database
-     * @throws SQLException
+     * @throws SQLException On failing a database operation.
      */
     @Override
     public void insert(User record) throws SQLException {
@@ -68,6 +72,7 @@ public class UserDaoImpl implements DaoInterface<User> {
 
     /**
      * Retrieves all users from user database.
+     * @throws SQLException On failing a database operation.
      * @return  ArrayList of users
      */
     @Override

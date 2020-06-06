@@ -3,6 +3,11 @@ package dao;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ *Data Access Object interface for all Model implementations.
+ * @param <T> Represents a Model
+ * @author Joseph Arellano
+ */
 public interface DaoInterface<T> {
     //Inserts Record into database
     public void insert(T record) throws SQLException;
