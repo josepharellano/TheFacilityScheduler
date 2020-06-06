@@ -19,8 +19,8 @@ public class DBConnection {
     private static final String MYSQLJDBCDriver = "com.mysql.jdbc.Driver";
     private static Connection conn = null;
 
-    private static final String username ="U06EMb";     //UserName
-    private static final String password = "53688739981";    //Password
+    private static final String username = Constants.DB_USERNAME;     //UserName
+    private static final String password = Constants.DB_PASSWORD;    //Password
 
     public static Connection startConnection() {
         try{
