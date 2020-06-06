@@ -34,11 +34,10 @@ public class Main extends Application {
         try {
            users = user.selectAll();
             System.out.print(Arrays.toString(new ArrayList[]{users}));
-            Address testAdd = new Address("jake","jason");
-            testAdd.setId(1);
-            Customer test = new Customer("Jake","John", testAdd);
 
-            customer.insert(test);
+
+
+            customer.delete(5);
         }catch(SQLException ex){
                 ex.printStackTrace();
             }
