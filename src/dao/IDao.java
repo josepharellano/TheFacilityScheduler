@@ -13,7 +13,7 @@ public interface IDao<T> {
     public void insert(T record) throws SQLException;
 
     //Delete Record from database
-    public boolean delete(int id);
+    public boolean delete(int id) throws SQLException;
 
     //Update Record in database
     public boolean update(T record);

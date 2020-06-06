@@ -4,9 +4,11 @@ import com.mysql.jdbc.Connection;
 import models.Customer;
 import utilities.DBConnection;
 import utilities.DBQuery;
+import utilities.SQLHelper;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,9 +17,14 @@ import java.util.List;
  */
 public class CustomerIDaoImpl implements IDao<Customer> {
 
+    private static final String table = "customer";
+    private static final List<String> columns = Arrays.asList("customerName","addressId","active","createDate",
+            "createdBy","lastUpdate","lastUpdateBy");
     //SQL Query String to insert into Database
     private static final String INSERT_INTO_CUSTOMER = "INSERT INTO customer (customerName,addressId,active,createDate," +
             "createdBy,lastUpdate,lastUpdateBy) VALUES(?,?,?,?,?,?,?)";
+    //SQL Query to selectAll Customers from database
+
 
     @Override
     public void insert(Customer record) throws SQLException {
@@ -25,7 +32,7 @@ public class CustomerIDaoImpl implements IDao<Customer> {
      try(Connection conn = DBConnection.startConnection()){
 
          //Set PreparedStatement
-         PreparedStatement ps = DBQuery.setPreparedStatement(conn,INSERT_INTO_CUSTOMER);
+         PreparedStatement ps = DBQuery.setPreparedStatement(conn, SQLHelper.insertIntoSQL(table,columns));
 
          //Build Query Statement
          ps.setString(1, record.getName());
@@ -44,7 +51,14 @@ public class CustomerIDaoImpl implements IDao<Customer> {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(int id) throws SQLException {
+        try(Connection conn = DBConnection.startConnection()) {
+
+            //Set PreparedStatement
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn, SQLHelper.deleteRecordsSQL(table,"customerId",Integer.toString(id)));
+            //Complete Query
+            DBQuery.makeQuery();
+        }
         return false;
     }
 
