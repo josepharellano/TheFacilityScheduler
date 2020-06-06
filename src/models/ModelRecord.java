@@ -24,7 +24,6 @@ public abstract class ModelRecord {
     }
 
     public ModelRecord(String name, String creator) {
-        this.id = null;
         this.name = name;
         this.createdBy = creator;
         this.createDate = new Date(System.currentTimeMillis());
