@@ -5,17 +5,14 @@ import models.User;
 import utilities.DBConnection;
 import utilities.DBQuery;
 
-import javax.xml.transform.Result;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Data Access Object implementation for a User Model.
  * @author Joseph Arellano
  */
-public class UserDaoImpl implements DaoInterface<User> {
+public class UserIDaoImpl implements IDao<User> {
 
     //Insert Statement
     private static final String INSERT_USERS_SQL = "INSERT INTO user (userName,password,active,createDate,createdBy,lastUpdate,lastUpdateBy) VALUES(?,?,?,?,?,?)";

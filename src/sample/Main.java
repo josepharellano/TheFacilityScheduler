@@ -1,13 +1,12 @@
 package sample;
 
-import dao.UserDaoImpl;
+import dao.UserIDaoImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import models.User;
-import utilities.DBConnection;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         ArrayList<User> users;
-        UserDaoImpl user = new UserDaoImpl();
+        UserIDaoImpl user = new UserIDaoImpl();
         try {
            users = user.selectAll();
             System.out.print(Arrays.toString(new ArrayList[]{users}));

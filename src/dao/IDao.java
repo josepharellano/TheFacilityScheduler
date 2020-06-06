@@ -8,7 +8,7 @@ import java.util.List;
  * @param <T> Represents a Model
  * @author Joseph Arellano
  */
-public interface DaoInterface<T> {
+public interface IDao<T> {
     //Inserts Record into database
     public void insert(T record) throws SQLException;
 
