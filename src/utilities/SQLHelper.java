@@ -20,7 +20,7 @@ public class SQLHelper {
      * @param columns The column names of the table.
      * @return A SQL Query String.
      */
-    public static String insertIntoSQL(String table, List<String> columns) {
+    public static String insertRecordSQL(String table, List<String> columns) {
         String sqlCommand = "INSERT INTO ";
         String columnHeaders = String.join(",", columns);
 
@@ -33,14 +33,30 @@ public class SQLHelper {
     }
 
     /**
-     * Build SQL Query to delete recored from table where column = key
+     * Build SQL Query to delete record from table where conditions are met
      * @param table Target Table.
-     * @param column Column to delete records on
-     * @param key Column value test.
+     * @param conditions Determines at which columns to delete the record.
      * @return
      */
-    public static String deleteRecordsSQL(String table, String column, String key ){
-        String sqlCommand = "DELETE FROM ";
-        return sqlCommand + table + " WHERE " + column + "=" + key;
+    public static String deleteRecordsSQL(String table, String conditions){
+        return "DELETE FROM " + table + " WHERE " + conditions;
     }
+
+    /**
+     * Returns the SQLCommand to update a record in a table.
+     * @param table Target table
+     * @param columns Columns to update on.
+     * @param condition On which column and value to complete update on.
+     * @return
+     */
+    public static String updateRecordSQL(String table, List<String> columns, String condition){
+        String sqlCommand = "UPDATE " + table + "SET ";
+        String values = columns.stream().map(column-> column + "=?").collect(Collectors.joining(", "));
+        return sqlCommand + values + " WHERE " + condition;
+    }
+
+    public static String selectRecordSQL(String table, String condition){
+        return "SELECT * FROM " + table + "WHERE " + condition;
+    }
+
 }

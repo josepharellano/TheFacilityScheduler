@@ -4,6 +4,7 @@ import com.mysql.jdbc.Connection;
 import models.User;
 import utilities.DBConnection;
 import utilities.DBQuery;
+import utilities.SQLCondition;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,9 +23,10 @@ public class UserIDaoImpl implements IDao<User> {
      * Inserts a user object into the user database
      * @param record user object being inserted into database
      * @throws SQLException On failing a database operation.
+     * @return
      */
     @Override
-    public void insert(User record) throws SQLException {
+    public Integer insert(User record,String creator) throws SQLException {
         //Try with Resources to obtain connection
         try (Connection conn = DBConnection.startConnection()) {
 
@@ -43,21 +45,22 @@ public class UserIDaoImpl implements IDao<User> {
             //Make Query
             DBQuery.makeQuery();
         }
+        return null;
     }
 
     @Override
-    public boolean delete(int id) {
-        return false;
+    public void delete(int id) throws SQLException {
+
     }
 
     @Override
-    public boolean update(User record) {
-        return false;
+    public void update(User record,String updateBy) {
+
     }
 
     @Override
-    public boolean select(int id) {
-        return false;
+    public void select(int id) {
+
     }
 
     /**

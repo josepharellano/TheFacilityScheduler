@@ -10,16 +10,16 @@ import java.util.List;
  */
 public interface IDao<T> {
     //Inserts Record into database
-    public void insert(T record) throws SQLException;
+    public Integer insert(T record,String creator) throws SQLException;
 
     //Delete Record from database
-    public boolean delete(int id) throws SQLException;
+    public void delete(int id) throws SQLException;
 
     //Update Record in database
-    public boolean update(T record);
+    public void update(T record,String updatedBy) throws SQLException;
 
     //Select Record from database
-    public boolean select(int id);
+    public void select(int id);
 
     //Select All Records from database
     public List<T> selectAll() throws SQLException;

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.CustomerController"
+            minHeight="Infinity"
+            minWidth="400"
+            maxWidth="Infinity"
+            maxHeight="Infinity">
+    <BorderPane styleClass="gridPaneWrapper" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
+        <center>
+            <TableView fx:id="customerTable" minWidth="400" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="customerId" text="Customer ID" minWidth="150"/>
+                    <TableColumn fx:id="customerName" text="Customer Name" minWidth="250"/>
+                    <TableColumn fx:id="telephone" text="Telephone" minWidth="150" />
+                    <TableColumn fx:id="address" text="Address" minWidth="250"/>
+                    <TableColumn fx:id="addressLine" text="Address Line" minWidth="250" />
+                    <TableColumn fx:id="city" text="City" minWidth="150"/>
+                    <TableColumn fx:id="country" text="Country" minWidth="150" />
+                    <TableColumn fx:id="postalCode" text="Postal Code" minWidth="150" />
+                </columns>
+            </TableView>
+        </center>
+        <right>
+            <VBox styleClass="btnContainer" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Button maxWidth="Infinity" text="Add"/>
+                <Button maxWidth="Infinity" text="Edit"/>
+                <Button onAction="#onRemove" maxWidth="Infinity" text="Remove"/>
+                <Button onAction="#onRefresh" maxWidth="Infinity" text="Refresh"/>
+            </VBox>
+        </right>
+        <bottom>
+            <HBox styleClass="infoPane">
+                <Text fx:id="statusMessages"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Text fx:id="lastUpdate"/>
+            </HBox>
+        </bottom>
+    </BorderPane>
+
+</AnchorPane>

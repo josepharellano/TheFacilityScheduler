@@ -7,40 +7,43 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import models.Address;
 import models.Customer;
 import models.User;
+import services.CustomerService;
+import utilities.SQLCondition;
+import utilities.SQLHelper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/views/CustomerView.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setMaximized(true);
+        primaryStage.getScene().getStylesheets().add("/css/CustomerScene");
+        primaryStage.setMinWidth(600);
         primaryStage.show();
     }
 
 
     public static void main(String[] args) {
 
-        ArrayList<User> users;
+        List<Customer> customers;
         UserIDaoImpl user = new UserIDaoImpl();
-        CustomerIDaoImpl customer = new CustomerIDaoImpl() ;
-        try {
-           users = user.selectAll();
-            System.out.print(Arrays.toString(new ArrayList[]{users}));
+        CustomerService service = CustomerService.getInstance();
 
+           customers = service.getCustomers();
 
+            //Test Inserting
 
-            customer.delete(5);
-        }catch(SQLException ex){
-                ex.printStackTrace();
-            }
         launch(args);
     }
 }
