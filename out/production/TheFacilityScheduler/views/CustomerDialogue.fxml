@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.CustomerDialogueController"
+            >
+    <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <Group StackPane.alignment="CENTER">
+            <VBox  alignment="CENTER">
+                <Text styleClass="title" strokeType="OUTSIDE" text="Add New Customer" />
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" spacing="10.0">
+                    <Label minWidth="150" VBox.vgrow="ALWAYS" alignment="CENTER_RIGHT" text="Customer Name"/>
+                    <TextField minWidth="150" fx:id="customerName" HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" spacing="10.0">
+                    <Label minWidth="150" VBox.vgrow="ALWAYS" alignment="CENTER_RIGHT" text="Address"/>
+                    <TextField minWidth="150" fx:id="address" HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" spacing="10.0">
+                    <Label minWidth="150" VBox.vgrow="ALWAYS" alignment="CENTER_RIGHT" text="Address Line"/>
+                    <TextField minWidth="150" fx:id="addressLine" HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" spacing="10.0">
+                    <Label minWidth="150" VBox.vgrow="ALWAYS" alignment="CENTER_RIGHT" text="City"/>
+                    <ComboBox minWidth="150" fx:id="citiesCBox" HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" spacing="10.0">
+                    <Label minWidth="150" VBox.vgrow="ALWAYS" alignment="CENTER_RIGHT" text="Country"/>
+                    <ComboBox minWidth="150" fx:id="countriesCBox" HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" spacing="10.0">
+                    <Label minWidth="150" VBox.vgrow="ALWAYS" alignment="CENTER_RIGHT" text="Postal Code"/>
+                    <TextField minWidth="150" fx:id="postalCode" HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" spacing="10.0">
+                    <Label minWidth="150" VBox.vgrow="ALWAYS" alignment="CENTER_RIGHT" text="Telephone"/>
+                    <TextField minWidth="150" fx:id="telephone" HBox.hgrow="ALWAYS"/>
+                    <VBox.margin><Insets><bottom>25</bottom></Insets></VBox.margin>
+                </HBox>
+                <HBox spacing="25" alignment="CENTER">
+                    <Button fx:id="saveBtn" onAction="#onAddCustomer" text="Add"/>
+                    <Button onAction="#onClose" text="Cancel"/>
+                </HBox>
+            </VBox>
+        </Group>
+    </StackPane>
+
+</AnchorPane>
