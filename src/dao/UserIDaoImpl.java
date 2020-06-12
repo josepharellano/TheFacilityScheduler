@@ -4,14 +4,16 @@ import com.mysql.jdbc.Connection;
 import models.User;
 import utilities.DBConnection;
 import utilities.DBQuery;
+import utilities.SQLCondition;
 
-import javax.xml.transform.Result;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
-public class UserDaoImpl implements DaoInterface<User> {
+/**
+ * Data Access Object implementation for a User Model.
+ * @author Joseph Arellano
+ */
+public class UserIDaoImpl implements IDao<User> {
 
     //Insert Statement
     private static final String INSERT_USERS_SQL = "INSERT INTO user (userName,password,active,createDate,createdBy,lastUpdate,lastUpdateBy) VALUES(?,?,?,?,?,?)";
@@ -20,54 +22,50 @@ public class UserDaoImpl implements DaoInterface<User> {
     /**
      * Inserts a user object into the user database
      * @param record user object being inserted into database
-     * @throws SQLException
+     * @throws SQLException On failing a database operation.
+     * @return
      */
     @Override
-    public void insert(User record) throws SQLException {
+    public Integer insert(User record,String creator) throws SQLException {
         //Try with Resources to obtain connection
         try (Connection conn = DBConnection.startConnection()) {
 
             //Set Statement
-            PreparedStatement ps = DBQuery.setPreparedStatement(conn,INSERT_USERS_SQL);
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn, INSERT_USERS_SQL);
 
             //Build Query
-            ps.setString(0,record.getName());
-            ps.setString(1,record.getPassword());
-            ps.setBoolean(2, record.getIsActive());
-            ps.setDate(3, record.getCreateDate());
-            ps.setString(4,record.getCreatedBy());
-            ps.setTimestamp(5, record.getLastUpdate());
-            ps.setString(6,record.getLastUpdateBy());
+            ps.setString(1, record.getName());
+            ps.setString(2, record.getPassword());
+            ps.setBoolean(3, record.getIsActive());
+            ps.setDate(4, record.getCreateDate());
+            ps.setString(5, record.getCreatedBy());
+            ps.setTimestamp(6, record.getLastUpdate());
+            ps.setString(7, record.getLastUpdateBy());
 
             //Make Query
             DBQuery.makeQuery();
-
-            //Query is a success
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-
-        //Close connection
-        DBConnection.closeConnection();
+        return null;
     }
 
     @Override
-    public boolean delete(int id) {
-        return false;
+    public void delete(int id) throws SQLException {
+
     }
 
     @Override
-    public boolean update(User record) {
-        return false;
+    public void update(User record,String updateBy) {
+
     }
 
     @Override
-    public boolean select(int id) {
-        return false;
+    public void select(int id) {
+
     }
 
     /**
      * Retrieves all users from user database.
+     * @throws SQLException On failing a database operation.
      * @return  ArrayList of users
      */
     @Override

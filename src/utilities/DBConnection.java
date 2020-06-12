@@ -5,6 +5,12 @@ import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Database Helpers class to handle Database Driver and handle Database Connection.
+ *
+ * Author: Joseph Arellano
+ */
+
 public class DBConnection {
 
     // JBDC URL parts

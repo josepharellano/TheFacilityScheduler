@@ -1,0 +1,34 @@
+.root{
+    -fx-background-color: #eceff1;
+    -fx-background-image: url("../images/bgtexture.png");
+    -fx-background-repeat: repeat;
+}
+
+.label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #455a64;
+}
+
+.title {
+   -fx-font-size: 22px;
+   -fx-font-weight: bold;
+   -fx-fill: #455a64;
+}
+
+.button {
+    -fx-min-width: 100px;
+    -fx-min-height: 35px;
+    -fx-max-width: 100px;
+    -fx-max-height: 35px;
+    -fx-background-radius: 4px;
+    -fx-background-color: #718792;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-fill: #000000;
+    -fx-effect: dropshadow(gaussian,#192a32,10.0,0.0,.6,2,0);
+}
+
+.button:hover {
+    -fx-background-color: #b0bec5;
+}

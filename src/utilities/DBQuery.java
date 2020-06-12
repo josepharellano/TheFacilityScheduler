@@ -5,13 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Database helper class to handle SQL statements and resultSets.
+ *
+ * Author: Joseph Arellano
+ */
 public class DBQuery  {
 
     private static PreparedStatement preparedStatement; //Statement reference
 
     //Create Statement Object
     public static PreparedStatement setPreparedStatement(Connection conn, String sqlQuery) throws SQLException {
-            preparedStatement = conn.prepareStatement(sqlQuery);
+
+            preparedStatement = conn.prepareStatement(sqlQuery,PreparedStatement.RETURN_GENERATED_KEYS);
             return preparedStatement;
     }
 
