@@ -11,6 +11,7 @@ import javafx.util.Pair;
 import models.Address;
 import models.Customer;
 import models.User;
+import services.AddressService;
 import services.CustomerService;
 import utilities.SQLCondition;
 import utilities.SQLHelper;
@@ -27,20 +28,25 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/views/CustomerView.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 800, 600));
-        primaryStage.setMaximized(true);
-        primaryStage.getScene().getStylesheets().add("/css/CustomerScene");
+//        primaryStage.setMaximized(true);
+        primaryStage.getScene().getStylesheets().add("/css/globalStyles.css");
+        primaryStage.getScene().getStylesheets().add("/css/customerScene.css");
         primaryStage.setMinWidth(600);
         primaryStage.show();
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         List<Customer> customers;
+        List<Address.City> cities;
         UserIDaoImpl user = new UserIDaoImpl();
         CustomerService service = CustomerService.getInstance();
+        AddressService addrService = AddressService.getInstance();
+
 
            customers = service.getCustomers();
+           addrService.refreshAddressData();
 
             //Test Inserting
 

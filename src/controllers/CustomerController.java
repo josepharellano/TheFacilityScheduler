@@ -2,18 +2,23 @@ package controllers;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import models.Customer;
+import sample.Controller;
 import services.CustomerService;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -52,13 +57,12 @@ public class CustomerController implements Initializable {
     private CustomerService service; //Customer Business Logic
 
 
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         service = CustomerService.getInstance();
+        setUpCustomerTable(); //Sets up Customer Table
+        updateCustomerData();//Populate Table Data
 
-        setUpCustomerTable(); //Sets up Customer Table and populates data.
     }
 
     /**
@@ -66,8 +70,6 @@ public class CustomerController implements Initializable {
      */
     private void setUpCustomerTable(){
 
-        //Update Customers data from Service
-        customerTable.setItems(FXCollections.observableArrayList(service.getCustomers()));
 
         //Wire columns to customer properties
         customerId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -79,8 +81,8 @@ public class CustomerController implements Initializable {
         telephone.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getPhone()));
         address.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getAddress()));
         addressLine.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getAddressLine()));
-        city.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCity()));
-        country.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCountry()));
+        city.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCity().getName()));
+        country.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCountry().getName()));
         postalCode.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getPostalCode()));
 
         /*
@@ -116,6 +118,7 @@ public class CustomerController implements Initializable {
         customerTable.setItems(FXCollections.observableArrayList(service.getCustomers()));
 
         //Set Last Update Time
+        //TODO Make Time equal local time as hours not military time.
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm a");
         lastUpdate.setText("Last Updated:   " + currentDateTime.format(formatter));
@@ -128,6 +131,9 @@ public class CustomerController implements Initializable {
     public void onRefresh(ActionEvent actionEvent) {
         //TODO Add a time limit so database doesn't get spammed by refresh.
         updateCustomerData();
+
+        //Clear Status Messages
+        statusMessages.setText("");
     }
 
     /**
@@ -139,7 +145,6 @@ public class CustomerController implements Initializable {
 
         //Try to remove selected customer from database.
         if(service.removeCustomer(selected.getId())){
-
             //After remove - data becomes stale refresh data.
             updateCustomerData();
             statusMessages.setText("Customer Removed");
@@ -147,5 +152,47 @@ public class CustomerController implements Initializable {
             statusMessages.setText("Failed to Remove Customer");
         }
 
+    }
+
+    public void onAddCustomer(ActionEvent actionEvent) throws IOException {
+        showCustomerDialogue(false,null);
+
+        //Refresh stale data
+        updateCustomerData();
+
+        //Status Message
+        statusMessages.setText("Customer Added");
+    }
+
+    public void onEditCustomer(ActionEvent actionEvent) throws IOException {
+        Customer customer = customerTable.getSelectionModel().getSelectedItem();
+
+        if(customer != null) {
+            showCustomerDialogue(true, customer);
+
+            //Refresh stale data
+            updateCustomerData();
+
+            //Set Status Message
+            statusMessages.setText("Customer Edited");
+        }else statusMessages.setText("Must Select a Customer to Edit");
+    }
+
+    private void showCustomerDialogue(boolean edit, Customer customer) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/CustomerDialogue.fxml"));
+        Parent parent = fxmlLoader.load();
+
+        //If edit is true then setup edit dialogue
+        if (edit) {
+            CustomerDialogueController controller = fxmlLoader.getController();
+            controller.setEditDialogue(customer);
+        }
+        Scene scene = new Scene(parent, 400,500);
+        //Set stylesheets for the dialogue
+        scene.getStylesheets().add("/css/globalStyles.css");
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 }

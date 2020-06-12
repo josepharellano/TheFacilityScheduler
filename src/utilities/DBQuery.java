@@ -16,7 +16,7 @@ public class DBQuery  {
 
     //Create Statement Object
     public static PreparedStatement setPreparedStatement(Connection conn, String sqlQuery) throws SQLException {
-            System.out.println(sqlQuery);
+
             preparedStatement = conn.prepareStatement(sqlQuery,PreparedStatement.RETURN_GENERATED_KEYS);
             return preparedStatement;
     }

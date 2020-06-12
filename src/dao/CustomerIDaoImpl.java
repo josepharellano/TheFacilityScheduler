@@ -37,7 +37,8 @@ public class CustomerIDaoImpl implements IDao<Customer> {
      */
     @Override
     public Integer insert(Customer record, String creator) throws SQLException {
-     // Use Try With Resources to handle auto closing of resources.
+
+        // Use Try With Resources to handle auto closing of resources.
      try(Connection conn = DBConnection.startConnection()){
 
          //Set PreparedStatement
@@ -46,8 +47,7 @@ public class CustomerIDaoImpl implements IDao<Customer> {
          //Build Query Statement
          ps.setString(1, record.getName());
          //Testing purposes only
-         ps.setInt(2,1);
-//         ps.setInt(2,record.getAddress().getId());
+         ps.setInt(2,record.getAddress().getId());
          ps.setBoolean(3,record.isActive());
          ps.setDate(4, new Date(System.currentTimeMillis()));
          ps.setString(5,creator);
@@ -94,6 +94,10 @@ public class CustomerIDaoImpl implements IDao<Customer> {
      */
     @Override
     public void update(Customer record, String updatedBy) throws SQLException {
+        //Check if Address is the same
+
+
+
         try(Connection conn = DBConnection.startConnection()){
 
             //Updates will always occur on customerId
@@ -104,12 +108,10 @@ public class CustomerIDaoImpl implements IDao<Customer> {
 
             //Build Query Statement
             ps.setString(1, record.getName());
-            //Testing purposes only
-            ps.setInt(2,1);
-//         ps.setInt(2,record.getAddress().getId());
+            ps.setInt(2,record.getAddress().getId());
             ps.setBoolean(3,record.isActive());
-            ps.setTimestamp(6,new Timestamp(System.currentTimeMillis()));
-            ps.setString(7,updatedBy);
+            ps.setTimestamp(4,new Timestamp(System.currentTimeMillis()));
+            ps.setString(5,updatedBy);
 
             //Make Query
             DBQuery.makeQuery();
@@ -126,9 +128,10 @@ public class CustomerIDaoImpl implements IDao<Customer> {
 
         List<Customer> customers = new ArrayList<>();
         // SELECT
-        String sqlQuery = "SELECT cust.customerId, cust.customerName,addr.addressId,addr.phone, addr.address, addr.address2,city.city, country.country,addr.postalCode,cust.active " +
+        String sqlQuery = "SELECT cust.customerId, cust.customerName,addr.addressId,addr.phone, addr.address, addr.address2,city.cityId,city.city,country.countryId, country.country," +
+                            "addr.postalCode,cust.active " +
                             "FROM customer as cust " +
-                            "INNER JOIN address as addr ON cust.customerId = addr.addressId " +
+                            "INNER JOIN address as addr ON cust.addressId = addr.addressId " +
                             "INNER JOIN city ON addr.cityId = city.cityId " +
                             "INNER JOIN country ON city.countryId = country.countryId";
 
@@ -147,14 +150,16 @@ public class CustomerIDaoImpl implements IDao<Customer> {
                 String phone= rs.getString(4);
                 String address = rs.getString(5);
                 String addressLine = rs.getString(6);
-                String city = rs.getString(7);
-                String country = rs.getString(8);
-                String postalCode = rs.getString(9);
-                boolean isActive = rs.getBoolean(10);
+                int cityId = rs.getInt(7);
+                String city = rs.getString(8);
+                int countryId = rs.getInt(9);
+                String country = rs.getString(10);
+                String postalCode = rs.getString(11);
+                boolean isActive = rs.getBoolean(12);
 
-                Address addr = new Address(addressId,address,addressLine,postalCode,phone,city,country);
+                Address addr = new Address(addressId,address,addressLine,postalCode,phone,new Address.City(cityId,city),new Address.Country(countryId,country));
                 Customer customer = new Customer(id,name,addr,isActive);
-
+                System.out.println(customer);
                 customers.add(customer);
             }
 

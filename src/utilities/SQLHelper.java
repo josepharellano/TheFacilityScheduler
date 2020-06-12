@@ -50,8 +50,9 @@ public class SQLHelper {
      * @return
      */
     public static String updateRecordSQL(String table, List<String> columns, String condition){
-        String sqlCommand = "UPDATE " + table + "SET ";
+        String sqlCommand = "UPDATE " + table + " SET ";
         String values = columns.stream().map(column-> column + "=?").collect(Collectors.joining(", "));
+        System.out.println(sqlCommand + values + " WHERE " + condition);
         return sqlCommand + values + " WHERE " + condition;
     }
 

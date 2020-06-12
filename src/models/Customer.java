@@ -10,7 +10,7 @@ public class Customer {
     private Address address; // Address of the Customer
     private boolean isActive; // Is customer active
 
-    public Customer(int id, String name, Address address, boolean isActive) {
+    public Customer(Integer id, String name, Address address, boolean isActive) {
 
         this.id = id;
         this.name = name;
@@ -35,6 +35,11 @@ public class Customer {
     public boolean isActive(){
         return this.isActive;
     }
+
+    //Setters
+    public void setName(String name) {this.name = name;}
+    public void setAddress(Address address){ this.address = address;}
+
 
     @Override
     public String toString() {
