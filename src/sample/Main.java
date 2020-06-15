@@ -25,28 +25,19 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/views/CustomerView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/views/LoginView.fxml"));
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 1000, 600));
 //        primaryStage.setMaximized(true);
         primaryStage.getScene().getStylesheets().add("/css/globalStyles.css");
-        primaryStage.getScene().getStylesheets().add("/css/customerScene.css");
+        primaryStage.getScene().getStylesheets().add("/css/loginscene.css");
         primaryStage.setMinWidth(600);
         primaryStage.show();
     }
 
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args)  {
 
-        List<Customer> customers;
-        List<Address.City> cities;
-        UserIDaoImpl user = new UserIDaoImpl();
-        CustomerService service = CustomerService.getInstance();
-        AddressService addrService = AddressService.getInstance();
-
-
-           customers = service.getCustomers();
-           addrService.refreshAddressData();
 
             //Test Inserting
 
