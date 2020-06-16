@@ -19,7 +19,7 @@ public interface IDao<T> {
     public void update(T record,String updatedBy) throws SQLException;
 
     //Select Record from database
-    public void select(int id);
+    public T select(String name) throws SQLException;
 
     //Select All Records from database
     public List<T> selectAll() throws SQLException;

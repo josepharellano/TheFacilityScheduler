@@ -11,7 +11,6 @@ public class Customer {
     private boolean isActive; // Is customer active
 
     public Customer(Integer id, String name, Address address, boolean isActive) {
-
         this.id = id;
         this.name = name;
         this.address = address;

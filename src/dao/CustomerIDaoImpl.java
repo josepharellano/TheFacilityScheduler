@@ -3,7 +3,6 @@ package dao;
 import com.mysql.jdbc.Connection;
 import models.Address;
 import models.Customer;
-import models.User;
 import utilities.DBConnection;
 import utilities.DBQuery;
 import utilities.SQLHelper;
@@ -94,9 +93,6 @@ public class CustomerIDaoImpl implements IDao<Customer> {
      */
     @Override
     public void update(Customer record, String updatedBy) throws SQLException {
-        //Check if Address is the same
-
-
 
         try(Connection conn = DBConnection.startConnection()){
 
@@ -118,9 +114,14 @@ public class CustomerIDaoImpl implements IDao<Customer> {
         }
     }
 
+    /**
+     * Not Implemented as not needed.
+     * @param name of the customer being selected.
+     * @return Customer retrieved from database.
+     */
     @Override
-    public void select(int id) {
-
+    public Customer select(String name) {
+        return null;
     }
 
     @Override

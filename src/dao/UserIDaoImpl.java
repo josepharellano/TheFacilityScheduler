@@ -2,9 +2,10 @@ package dao;
 
 import com.mysql.jdbc.Connection;
 import models.User;
+import utilities.Constants;
 import utilities.DBConnection;
 import utilities.DBQuery;
-import utilities.SQLCondition;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,91 +16,77 @@ import java.util.ArrayList;
  */
 public class UserIDaoImpl implements IDao<User> {
 
-    //Insert Statement
-    private static final String INSERT_USERS_SQL = "INSERT INTO user (userName,password,active,createDate,createdBy,lastUpdate,lastUpdateBy) VALUES(?,?,?,?,?,?)";
-    //Select All Statement
-    private static final String SELECT_ALL_USERS_SQL ="SELECT * from user";
     /**
-     * Inserts a user object into the user database
-     * @param record user object being inserted into database
-     * @throws SQLException On failing a database operation.
-     * @return
+     * Method not Implemented as not needed for this application.
+     * @param record User being added to the table.
+     * @param creator userName of session user who is adding record to the table.
+     * @return The userId of the newly added user.
+     * @throws SQLException
      */
     @Override
     public Integer insert(User record,String creator) throws SQLException {
-        //Try with Resources to obtain connection
-        try (Connection conn = DBConnection.startConnection()) {
-
-            //Set Statement
-            PreparedStatement ps = DBQuery.setPreparedStatement(conn, INSERT_USERS_SQL);
-
-            //Build Query
-            ps.setString(1, record.getName());
-            ps.setString(2, record.getPassword());
-            ps.setBoolean(3, record.getIsActive());
-            ps.setDate(4, record.getCreateDate());
-            ps.setString(5, record.getCreatedBy());
-            ps.setTimestamp(6, record.getLastUpdate());
-            ps.setString(7, record.getLastUpdateBy());
-
-            //Make Query
-            DBQuery.makeQuery();
-        }
         return null;
     }
 
+    /**
+     * Method not Implemented as not needed for this application.
+     * @param id
+     * @throws SQLException
+     */
     @Override
     public void delete(int id) throws SQLException {
 
     }
 
+    /**
+     * Method not Implemented as not needed for this application.
+     * @param record User being updated.
+     * @param updateBy The userName of the session user.
+     */
     @Override
     public void update(User record,String updateBy) {
 
     }
 
+    /**
+     * Selects a user from user table by userName and returns a user to calling class.
+     * @param userName is the name of the user stored in the User table.
+     * @throws SQLException
+     */
     @Override
-    public void select(int id) {
+    public User select(String userName) throws SQLException {
+         final String  sqlQuery ="SELECT userId,userName,password,active FROM " + Constants.USER_TABLE + " WHERE userName = " + userName;
 
+         //Open connection to database.
+         try(Connection conn = DBConnection.startConnection()) {
+             //create a Prepared Statement to Query with.
+             PreparedStatement ps = DBQuery.setPreparedStatement(conn, sqlQuery);
+            //Query database.
+             DBQuery.makeQuery();
+             //Get Results set of the query.
+             ResultSet rs = DBQuery.getResultSet();
+            //Parse Result Set to create new user to return.
+             if (rs.next()) {
+                 int userId = rs.getInt(1);
+                 String name = rs.getString(2);
+                 String password = rs.getString(3);
+                 boolean isActive = rs.getBoolean(4);
+
+                 //Instantiate new user
+                 User user = new User(userId, password, name, isActive);
+                 return user;
+             }
+         }
+       return null;
     }
 
     /**
-     * Retrieves all users from user database.
+     * Method not Implemented as not needed for this application.
      * @throws SQLException On failing a database operation.
      * @return  ArrayList of users
      */
     @Override
-    public ArrayList<User> selectAll() throws SQLException{
-
-        //List of Users obtained from database.
-        ArrayList<User> users = new ArrayList<>();
-
-        //Get Connection from Database
-        try(Connection conn = DBConnection.startConnection()){
-          //Set Statement
-            DBQuery.setPreparedStatement(conn,SELECT_ALL_USERS_SQL);
-
-          //Execute Query
-            DBQuery.makeQuery();
-
-          //Get ResultSet
-            ResultSet rs = DBQuery.getResultSet();
-
-          //Iterate through the database to create users
-            while(rs.next()){
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-                String password = rs.getString(3);
-                boolean isActive = rs.getBoolean(4);
-                Date createDate = rs.getDate(5);
-                String createdBy = rs.getString(6);
-                Timestamp lastUpdate = rs.getTimestamp(7);
-                String lastUpdateBy = rs.getString(8);
-
-                //Create user and add to list
-                users.add(new User(id,password,name,isActive,createDate,createdBy,lastUpdate,lastUpdateBy));
-            }
-        }
-        return users;
+    public ArrayList<User> selectAll() throws SQLException {
+        return null;
     }
 }
