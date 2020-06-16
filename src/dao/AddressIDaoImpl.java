@@ -15,8 +15,6 @@ import java.util.TimeZone;
 
 public class AddressIDaoImpl implements  IDao<Address>{
 
-
-
     @Override
     public Integer insert(Address record, String creator) throws SQLException {
         String sqlQuery = "INSERT INTO address (address,address2,cityId,postalCode,phone,createDate,createdBy,lastUpdate,lastUpdateBy) " +
@@ -47,21 +45,42 @@ public class AddressIDaoImpl implements  IDao<Address>{
         return null;
     }
 
+    /**
+     * Method not Implemented as not needed for this application.
+     * @param id Id of the address record.
+     * @throws SQLException
+     */
     @Override
     public void delete(int id) throws SQLException {
 
     }
 
+    /**
+     * Method not Implemented as not needed for this application.
+     * @param record
+     * @param updatedBy
+     * @throws SQLException
+     */
     @Override
     public void update(Address record, String updatedBy) throws SQLException {
 
     }
 
+    /**
+     * Method not Implemented as not needed for this application.
+     * @param address
+     * @return
+     */
     @Override
-    public void select(int id) {
-
+    public Address select(String address) {
+        return null;
     }
 
+    /**
+     * Selects all addresses from database.
+     * @return List of Addresses
+     * @throws SQLException
+     */
     @Override
     public List<Address> selectAll() throws SQLException {
 
@@ -100,11 +119,16 @@ public class AddressIDaoImpl implements  IDao<Address>{
         return addresses;
     }
 
+    /**
+     * Retrieves all cities from database.
+     * @return List of Cities
+     * @throws SQLException
+     */
     public List<Address.City> getCities() throws SQLException {
 
         List<Address.City> cities = new ArrayList<>(); //List of cities
         //SQL Query Statement
-        String sqlQuery = "SELECT * FROM " + Constants.cityTable;
+        String sqlQuery = "SELECT * FROM " + Constants.CITY_TABLE;
 
 
         try(Connection conn = DBConnection.startConnection()){
@@ -125,11 +149,16 @@ public class AddressIDaoImpl implements  IDao<Address>{
         return cities;
     }
 
+    /**
+     * Retreives countries from database.
+     * @return List of Countries
+     * @throws SQLException
+     */
     public List<Address.Country> getCountries() throws SQLException {
 
         List<Address.Country> countries = new ArrayList<>(); //List of cities
         //SQL Query Statement
-        String sqlQuery = "SELECT * FROM " + Constants.countryTable;
+        String sqlQuery = "SELECT * FROM " + Constants.COUNTRY_TABLE;
 
 
         try(Connection conn = DBConnection.startConnection()){
