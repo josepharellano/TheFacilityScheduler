@@ -55,10 +55,11 @@ public class UserIDaoImpl implements IDao<User> {
      */
     @Override
     public User select(String userName) throws SQLException {
-         final String  sqlQuery ="SELECT userId,userName,password,active FROM " + Constants.USER_TABLE + " WHERE userName = " + userName;
+         final String  sqlQuery ="SELECT userId,userName,password,active FROM " + Constants.USER_TABLE + " WHERE userName LIKE \"" + userName +"\"";
 
          //Open connection to database.
          try(Connection conn = DBConnection.startConnection()) {
+             System.out.println(sqlQuery);
              //create a Prepared Statement to Query with.
              PreparedStatement ps = DBQuery.setPreparedStatement(conn, sqlQuery);
             //Query database.

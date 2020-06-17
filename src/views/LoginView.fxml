@@ -21,10 +21,10 @@
                 <Label text="LOGIN"/>
                 <Region minHeight="50"/>
                 <VBox styleClass="inputBox">
-                    <TextField promptText="Username"/>
-                    <TextField promptText="Password"/>
-                    <Region minHeight="25" maxHeight="25"/>
-                    <Button text="Sign In"/>
+                    <TextField fx:id="username" promptText="Username"/>
+                    <TextField fx:id="password" promptText="Password"/>
+                    <Label fx:id="errorStatus" id="errorStatus" text="Error Status" minHeight="35" maxHeight="35"/>
+                    <Button onAction="#onLogin" text="Sign In"/>
                 </VBox>
                 <Region/>
             </VBox>

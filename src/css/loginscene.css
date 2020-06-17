@@ -37,3 +37,9 @@ HBox {
  -fx-spacing: 25px;
  -fx-padding: 50px;
 }
+
+#errorStatus{
+    -fx-text-fill: #FF0000;
+    -fx-font-weight: bold;
+    -fx-font-size: 1.15em;
+}
