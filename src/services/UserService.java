@@ -11,6 +11,7 @@ public class UserService {
     private static User sessionUser; //User of the session
 
     private UserIDaoImpl dao;
+    
 
     private UserService(){
         dao = new UserIDaoImpl();
@@ -27,7 +28,7 @@ public class UserService {
     public void login(String userName, String password) throws InvalidPasswordEx, InvalidUserNameEx{
 
         try {
-            //Retreive user from database.
+            //Retrieve user from database.
             User user = dao.select(userName);
             //Check if Password matches
             if(user != null){
