@@ -9,13 +9,11 @@
 
 <?import javafx.scene.text.Text?>
 <?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.CustomerController"
-            minHeight="Infinity"
-            minWidth="400"
-            maxWidth="Infinity"
-            maxHeight="Infinity">
+>
     <BorderPane styleClass="gridPaneWrapper" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
         <center>
             <TableView fx:id="customerTable" minWidth="400" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
@@ -46,6 +44,9 @@
                 <Text fx:id="lastUpdate"/>
             </HBox>
         </bottom>
+        <stylesheets>
+            <URL value="@../css/globalStyles.css" />
+            <URL value="@../css/customerSceneStyles.css" />
+        </stylesheets>
     </BorderPane>
-
 </AnchorPane>

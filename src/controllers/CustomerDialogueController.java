@@ -11,10 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Address;
 import models.Customer;
-import services.AddressService;
-import services.CustomerService;
+import services.*;
 
-import javax.swing.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -47,12 +45,12 @@ public class CustomerDialogueController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        custService = CustomerService.getInstance();
-        addrService = AddressService.getInstance();
+        custService = (CustomerService) ServiceFactory.getService(new CustomerServiceFactory());
+        addrService = (AddressService) ServiceFactory.getService((new AddressServiceFactory()));
 
         //Set combobox Items
-        citiesCBox.setItems(FXCollections.observableArrayList(addrService.getCities()));
-        countriesCBox.setItems(FXCollections.observableArrayList(addrService.getCountries()));
+        citiesCBox.setItems(FXCollections.observableArrayList(addrService.getCities().values()));
+        countriesCBox.setItems(FXCollections.observableArrayList(addrService.getCountries().values()));
 
         //TODO Add listener to telephone textField to ensure only numbers are entered and text is formated as xxx-xxx-xxxx
 
@@ -62,7 +60,7 @@ public class CustomerDialogueController implements Initializable {
     public void onAddCustomer(ActionEvent action) {
 
         Address newAddress = new Address(address.getText(),addressLine.getText(),postalCode.getText(),telephone.getText(),
-                            citiesCBox.getSelectionModel().getSelectedItem(), countriesCBox.getSelectionModel().getSelectedItem());
+                            citiesCBox.getSelectionModel().getSelectedItem().getId(), countriesCBox.getSelectionModel().getSelectedItem().getId());
 
         Customer customer = new Customer(customerName.getText(),newAddress);
 
@@ -81,8 +79,8 @@ public class CustomerDialogueController implements Initializable {
         customer.getAddress().setAddressline(addressLine.getText());
         customer.getAddress().setPostalCode(postalCode.getText());
         customer.getAddress().setPhone(telephone.getText());
-        customer.getAddress().setCity(citiesCBox.getSelectionModel().getSelectedItem());
-        customer.getAddress().setCountry(countriesCBox.getSelectionModel().getSelectedItem());
+//        customer.getAddress().setCity(citiesCBox.getSelectionModel().getSelectedItem());
+//        customer.getAddress().setCountry(countriesCBox.getSelectionModel().getSelectedItem());
 
         try {
             custService.updateCustomer(customer);

@@ -1,15 +1,19 @@
 package models;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+public class Customer implements IModel {
 
-public class Customer {
-
-    private Integer id;
-    private String name;
-    private Address address; // Address of the Customer
+    private Integer id; //Unique Id of the customer
+    private String name; //Name of customer
+    private Address address; // Key to address Record associated with this customer
     private boolean isActive; // Is customer active
 
+    /**
+     * Create new Customer
+     * @param id of customer
+     * @param name of customer
+     * @param address Address associated with customer
+     * @param isActive Customer is active
+     */
     public Customer(Integer id, String name, Address address, boolean isActive) {
         this.id = id;
         this.name = name;
@@ -17,12 +21,16 @@ public class Customer {
         this.isActive = isActive;
     }
 
+    /**
+     * Create a new customer without ID as ID will be provided by database. New customers are considered active.
+     * @param name of customer
+     * @param address Address associated with customer
+     */
     public Customer(String name, Address address){
-        //Id is provided by the database
         this.id = null;
-        this.name = name; //Name of Customer
-        this.address = address; //Address of Customer
-        this.isActive = true; //Is the customer active?
+        this.name = name;
+        this.address = address;
+        this.isActive = true;
     }
 
     //Getters
@@ -30,14 +38,15 @@ public class Customer {
     public Address getAddress(){
         return this.address;
     }
-    public int getId() {return this.id;}
+    public Integer getId() {return this.id;}
     public boolean isActive(){
         return this.isActive;
     }
 
     //Setters
     public void setName(String name) {this.name = name;}
-    public void setAddress(Address address){ this.address = address;}
+    public void setAddressId(Address addressId){ this.address = addressId;}
+
 
 
     @Override

@@ -4,9 +4,8 @@ import dao.CustomerIDaoImpl;
 import models.Address;
 import models.Customer;
 
-import java.awt.*;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -14,51 +13,30 @@ import java.util.Objects;
  * @author Joseph Arellano
  */
 
-public class CustomerService {
+public class CustomerService extends Service<Customer> {
 
-    List<Customer> customers; //Cache list of customers.
+    HashMap<Integer,Customer> customers; //Cache list of customers.
     CustomerIDaoImpl dao; //Data Access Object for Customer
     private static CustomerService instance; //Customer Service is a singleton.
     private static AddressService addrService; //Address Service instance.
 
-    private CustomerService(){
-        dao = new CustomerIDaoImpl();
-        addrService = AddressService.getInstance();
-        refreshCustomerList();
-    }
-
-    public static CustomerService getInstance(){
-        if(instance == null){
-            instance = new CustomerService();
-        }
-        return instance;
-    }
-
-    //Return cached list of customers.
-    public List<Customer> getCustomers(){
-    return customers;
-    }
-
-    /**
-     *
-     */
-    public void refreshCustomerList(){
+    protected CustomerService(){
+        super(new CustomerIDaoImpl());
+        addrService = (AddressService) ServiceFactory.getService(new AddressServiceFactory());
         try {
-            customers = dao.selectAll();
-        }catch(SQLException ex){
-            ex.printStackTrace();
+            this.refreshData();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
     //Add Customer to database.
-    public void addCustomer(Customer customer) throws EmptyInputValue, SQLException{
+    public void addCustomer(Customer customer, Address address) throws EmptyInputValue, SQLException{
 
-        int addressId; //New address Id in database.
-
-       validateCustomerInput(customer);
+       validateCustomerInput(customer,address);
 
         //Insert new address into database and set addressId to returned database Id
-        customer.getAddress().setId(addrService.newAddress(customer.getAddress()));
+        customer.getAddressId().setAddressId(addrService.newAddress(address));
 
         //Add Customer to database
         //TODO Change out creator with user after login.
@@ -67,15 +45,15 @@ public class CustomerService {
     }
 
     //Update Customer in database
-    public void updateCustomer(Customer customer) throws EmptyInputValue, SQLException{
+    public void updateCustomer(Customer customer, Address address) throws EmptyInputValue, SQLException{
 
         //validate rest of customer fields
-        validateCustomerInput(customer);
+        validateCustomerInput(customer, address);
 
         //Check if Address is already in database.
-        if(!addrService.dbContainsAddress(customer.getAddress())){
+        if(!addrService.dbContainsAddress(address)){
             //Add address to database and set its Id
-            customer.getAddress().setId(addrService.newAddress(customer.getAddress()));
+            customer.setAddressId(addrService.newAddress(address));
         }
 
         //TODO Change updatedBy to loggedIn user.
@@ -83,16 +61,16 @@ public class CustomerService {
 
     }
 
-    public void validateCustomerInput(Customer customer) throws EmptyInputValue{
+    public void validateCustomerInput(Customer customer, Address address) throws EmptyInputValue{
 
         //Validate City and Country are not null.
         try {
-            Objects.requireNonNull(customer.getAddress().getCity());
+            Objects.requireNonNull(address.getCity());
         }catch(NullPointerException ex){
             throw new EmptyInputValue("Must Select a City.");
         }
         try {
-            Objects.requireNonNull(customer.getAddress().getCountry());
+            Objects.requireNonNull(address.getCountry());
         }catch(NullPointerException ex){
             throw new EmptyInputValue("Must Select a Country.");
         }
@@ -100,14 +78,14 @@ public class CustomerService {
         if(customer.getName().isEmpty()){
             throw new EmptyInputValue("Must provide a Name.");
         }
-        if(customer.getAddress().getAddress().isEmpty()){
+        if(address.getAddress().isEmpty()){
             throw new EmptyInputValue("Must provide an Address.");
         }
 
-        if(customer.getAddress().getPostalCode().isEmpty()){
+        if(address.getPostalCode().isEmpty()){
             throw new EmptyInputValue("Must provide a Postal Code.");
         }
-        if(customer.getAddress().getPhone().isEmpty()){
+        if(address.getPhone().isEmpty()){
             throw new EmptyInputValue("Must provide a Telephone Number.");
         }
     }

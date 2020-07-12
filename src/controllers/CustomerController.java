@@ -15,8 +15,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Customer;
-import sample.Controller;
+import services.AddressService;
 import services.CustomerService;
+import services.CustomerServiceFactory;
+import services.ServiceFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,14 +57,14 @@ public class CustomerController implements Initializable {
     private Text statusMessages; //Status Message Updates.
 
     private CustomerService service; //Customer Business Logic
+    private AddressService addrService //Address
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        service = CustomerService.getInstance();
+        service = (CustomerService) ServiceFactory.getService(new CustomerServiceFactory());
         setUpCustomerTable(); //Sets up Customer Table
         updateCustomerData();//Populate Table Data
-
     }
 
     /**
@@ -78,12 +80,12 @@ public class CustomerController implements Initializable {
          * Lambda expressions are needed on the following in order to retrieve the properties of the nested Address Object.
          * setCellValueFactory takes a callback of CellDataFeatures<Customer,String> and returns ObservableValue
          */
-        telephone.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getPhone()));
-        address.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getAddress()));
-        addressLine.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getAddressLine()));
-        city.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCity().getName()));
-        country.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCountry().getName()));
-        postalCode.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getPostalCode()));
+        telephone.setCellValueFactory(addressId -> new SimpleStringProperty(addressData.getValue().getAddress().getPhone()));
+//        address.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getAddress()));
+//        addressLine.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getAddressLine()));
+//        city.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCity().getName()));
+//        country.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCountry().getName()));
+//        postalCode.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getPostalCode()));
 
         /*
          * Allows a columns of the table to resize at fixed ratios depending on table width.
@@ -113,9 +115,9 @@ public class CustomerController implements Initializable {
      */
     private void updateCustomerData(){
 
-        service.refreshCustomerList();
         //Set customerTable to observable list of customers from customer service.
-        customerTable.setItems(FXCollections.observableArrayList(service.getCustomers()));
+        System.out.println(service.getData());
+        customerTable.setItems(FXCollections.observableArrayList(service.getData().values()));
 
         //Set Last Update Time
         //TODO Make Time equal local time as hours not military time.
