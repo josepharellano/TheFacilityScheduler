@@ -9,6 +9,7 @@ import utilities.DBQuery;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Data Access Object implementation for a User Model.
@@ -55,11 +56,10 @@ public class UserIDaoImpl implements IDao<User> {
      */
     @Override
     public User select(String userName) throws SQLException {
-         final String  sqlQuery ="SELECT userId,userName,password,active FROM " + Constants.USER_TABLE + " WHERE userName LIKE \"" + userName +"\"";
+        final String  sqlQuery ="SELECT userId,userName,password,active FROM " + Constants.USER_TABLE + " WHERE userName LIKE \"" + userName +"\"";
 
          //Open connection to database.
          try(Connection conn = DBConnection.startConnection()) {
-             System.out.println(sqlQuery);
              //create a Prepared Statement to Query with.
              PreparedStatement ps = DBQuery.setPreparedStatement(conn, sqlQuery);
             //Query database.
@@ -87,7 +87,28 @@ public class UserIDaoImpl implements IDao<User> {
      * @return  ArrayList of users
      */
     @Override
-    public ArrayList<User> selectAll() throws SQLException {
-        return null;
+    public HashMap<Integer,User> selectAll() throws SQLException {
+
+        HashMap<Integer,User> users = new HashMap<>();
+        final String sqlQuery = "SELECT userId,userName,active FROM " + Constants.USER_TABLE;
+
+        try(Connection conn = DBConnection.startConnection()){
+
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn,sqlQuery);
+            DBQuery.makeQuery();
+            ResultSet rs = DBQuery.getResultSet();
+
+            while(rs.next()){
+                int id = rs.getInt(1);
+                String name = rs.getString(2);
+                boolean isActive = rs.getBoolean(3);
+
+                User consultant = new User(id,name,isActive);
+                users.put(id,consultant);
+            }
+
+        }
+
+        return users;
     }
 }

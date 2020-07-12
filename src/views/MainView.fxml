@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.MainController"
+            fx:id="mainPane">
+    <top>
+        <VBox prefHeight="125">
+            <Region  VBox.vgrow="ALWAYS" />
+            <HBox  alignment="CENTER" >
+                <Region minWidth="50" maxWidth="150" HBox.hgrow="ALWAYS"/>
+                <Button id="label" text="Calender" />
+                <Region minWidth="50" maxWidth="150" HBox.hgrow="ALWAYS"/>
+                <Button id="label" text="Appointments" />
+                <Region minWidth="50" maxWidth="150" HBox.hgrow="ALWAYS"/>
+                <Button id="label" text="Customers" />
+                <Region minWidth="50" maxWidth="150" HBox.hgrow="ALWAYS"/>
+                <Button id="label" text="Reports" />
+                <Region minWidth="50" maxWidth="150" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <Region VBox.vgrow="ALWAYS" />
+        </VBox>
+    </top>
+    <bottom>
+        <Region minHeight="50" />
+    </bottom>
+    <stylesheets>
+        <URL value="@../css/globalStyles.css" />
+        <URL value="@../css/mainSceneStyles.css" />
+    </stylesheets>
+</BorderPane>

@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import main.scenemanager.SceneManager;
 import services.UserService;
 
 import javax.swing.*;
@@ -23,9 +24,17 @@ public class LoginController implements Initializable {
 
     UserService userService;
 
+    private String invalidPassword; //Localized error Message for invalid password
+    private String invalidUserName; //Localized error message for invalid username
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         userService = UserService.getInstance();
+
+        invalidPassword = resources.getString("invalid_password");
+        invalidUserName = resources.getString("invalid_username");
     }
 
     public void onLogin(ActionEvent event){
@@ -33,10 +42,16 @@ public class LoginController implements Initializable {
             userService.login(username.getText(), password.getText());
 
             //If successful load next screen.
-            errorStatus.setText("Logged In");
 
-        }catch(UserService.InvalidPasswordEx | UserService.InvalidUserNameEx ex){
-            errorStatus.setText(ex.getMessage());
+            SceneManager.setScene("mainView");
+
+        }catch(UserService.InvalidUserNameEx ex){
+            errorStatus.setText(invalidUserName);
+        }catch(UserService.InvalidPasswordEx ex){
+            errorStatus.setText(invalidPassword);
+        } catch (SceneManager.MissingScene missingScene) {
+            missingScene.printStackTrace();
         }
     }
+
 }

@@ -4,16 +4,18 @@ import dao.UserIDaoImpl;
 import models.User;
 
 import java.sql.SQLException;
+import java.util.Locale;
 
 public class UserService {
 
-    private static UserService instance; // Singletone instance of this service.
+    private static UserService instance; // Singleton instance of this service.
     private static User sessionUser; //User of the session
 
     private UserIDaoImpl dao;
-    
+
 
     private UserService(){
+
         dao = new UserIDaoImpl();
     }
 

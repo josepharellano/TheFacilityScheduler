@@ -1,15 +1,13 @@
 package models;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
 /**
  * Represents a ModelRecord of a User
  * @author Joseph Arellano
  */
-public class User {
+public class User implements IModel {
 
+    private int id;
+    private String name;
     private String password;
     private boolean isActive;
 
@@ -24,6 +22,13 @@ public class User {
         this.isActive = isActive;
         this.password = password;
     }
+
+    public User(int id, String userName, boolean isActive){
+        this.id = id;
+        this.name = userName;
+        this.isActive = isActive;
+    }
+
 
     /**
      * Toggles the Active state of this user.
@@ -43,5 +48,18 @@ public class User {
     }
     public String getPassword(){
         return this.password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @Override
+    public Integer getId() {
+        return this.id;
     }
 }

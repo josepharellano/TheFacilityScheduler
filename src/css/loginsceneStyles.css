@@ -33,6 +33,7 @@ VBox {
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
+
 HBox {
  -fx-spacing: 25px;
  -fx-padding: 50px;
