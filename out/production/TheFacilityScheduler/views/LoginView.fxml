@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.LoginController"
+            prefHeight="400.0" prefWidth="1000.0"
+            >
+    <HBox alignment="CENTER" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0">
+        <padding>
+            <Insets left="25" right="25"/>
+        </padding>
+        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+            <VBox>
+                <Label text="%login_title"/>
+                <Region minHeight="50"/>
+                <VBox styleClass="inputBox">
+                    <TextField fx:id="username" promptText="%username_input"/>
+                    <TextField fx:id="password" promptText="%password_input"/>
+                    <Label fx:id="errorStatus" id="errorStatus" minHeight="35" maxHeight="35"/>
+                    <Button onAction="#onLogin" text="%signin_btn"/>
+                </VBox>
+                <Region/>
+            </VBox>
+        </VBox>
+        <StackPane id="pane" minWidth="500" minHeight="300">
+            <ImageView fitWidth="500" preserveRatio="true">
+                <Image url="@../images/loginbackground.png"/>
+            </ImageView>
+        </StackPane>
+    </HBox>
+    <stylesheets>
+        <URL value="@../css/globalStyles.css" />
+        <URL value="@../css/loginsceneStyles.css" />
+    </stylesheets>
+</AnchorPane>

@@ -1,0 +1,46 @@
+.pane {
+    -fx-font-size: 1.25em;
+}
+
+TextField {
+    -fx-pref-height: 40px;
+    -fx-max-width: 275px;
+}
+
+VBox {
+    -fx-max-width: 275px;
+    -fx-min-width: 275px;
+}
+
+.inputBox {
+    -fx-spacing: 10;
+    -fx-alignment: center;
+}
+
+
+.label {
+    -fx-font-size: 2em;
+    -fx-weight: 900;
+}
+
+.button {
+    -fx-pref-width: 200px;
+    -fx-min-width: 200px;
+}
+
+#pane {
+    -fx-background-image: url("../images/loginbackground.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+HBox {
+ -fx-spacing: 25px;
+ -fx-padding: 50px;
+}
+
+#errorStatus{
+    -fx-text-fill: #FF0000;
+    -fx-font-weight: bold;
+    -fx-font-size: 1.15em;
+}
