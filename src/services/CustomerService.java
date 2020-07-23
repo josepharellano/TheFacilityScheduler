@@ -1,7 +1,9 @@
 package services;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import dao.CustomerIDaoImpl;
 import models.Address;
+import models.Appointment;
 import models.Customer;
 
 import java.sql.SQLException;
@@ -16,7 +18,6 @@ import java.util.Objects;
 public class CustomerService extends Service<Customer> {
 
     HashMap<Integer,Customer> customers; //Cache list of customers.
-    CustomerIDaoImpl dao; //Data Access Object for Customer
     private static CustomerService instance; //Customer Service is a singleton.
     private static AddressService addrService; //Address Service instance.
 
@@ -31,48 +32,47 @@ public class CustomerService extends Service<Customer> {
     }
 
     //Add Customer to database.
-    public void addCustomer(Customer customer, Address address) throws EmptyInputValue, SQLException{
+    public void addCustomer(Customer customer) throws EmptyInputValue, SQLException{
 
-       validateCustomerInput(customer,address);
+       validateCustomerInput(customer);
 
         //Insert new address into database and set addressId to returned database Id
-        customer.getAddressId().setAddressId(addrService.newAddress(address));
+        customer.getAddress().setId(addrService.newAddress(customer.getAddress()));
 
         //Add Customer to database
         //TODO Change out creator with user after login.
-        dao.insert(customer,"Test");
+        customer.setId(this.dao.insert(customer,"Test"));
+        //Add Customer to cache
+        this.data.put(customer.getId(),customer);
 
     }
 
     //Update Customer in database
-    public void updateCustomer(Customer customer, Address address) throws EmptyInputValue, SQLException{
-
+    public void updateCustomer(Customer customer) throws EmptyInputValue, SQLException {
+        Address address = customer.getAddress(); //Customer Address
         //validate rest of customer fields
-        validateCustomerInput(customer, address);
+        validateCustomerInput(customer);
 
         //Check if Address is already in database.
         if(!addrService.dbContainsAddress(address)){
             //Add address to database and set its Id
-            customer.setAddressId(addrService.newAddress(address));
+            address.setId(addrService.newAddress(address));
         }
 
         //TODO Change updatedBy to loggedIn user.
-        dao.update(customer,"Test");
-
+        this.dao.update(customer,"Test");
+        //Update Cache
+        data.put(customer.getId(),customer);
     }
 
-    public void validateCustomerInput(Customer customer, Address address) throws EmptyInputValue{
+    public void validateCustomerInput(Customer customer) throws EmptyInputValue{
 
+        Address address = customer.getAddress();
         //Validate City and Country are not null.
         try {
             Objects.requireNonNull(address.getCity());
         }catch(NullPointerException ex){
             throw new EmptyInputValue("Must Select a City.");
-        }
-        try {
-            Objects.requireNonNull(address.getCountry());
-        }catch(NullPointerException ex){
-            throw new EmptyInputValue("Must Select a Country.");
         }
         //Validate Remaining fields are not empty
         if(customer.getName().isEmpty()){
@@ -90,19 +90,33 @@ public class CustomerService extends Service<Customer> {
         }
     }
 
-    public boolean removeCustomer(int id) {
+    public boolean removeCustomer(int id) throws AppointmentConstraint {
+
         try {
-            dao.delete(id);
+            this.dao.delete(id);
+            System.out.println(this.data.get(id));
+            this.data.remove(id);
+            System.out.println(data);
             return true;
+        } catch (MySQLIntegrityConstraintViolationException e) {
+            throw new AppointmentConstraint();
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
         }
     }
 
+
     public static class EmptyInputValue extends Exception{
         public EmptyInputValue(String msg){
             super(msg);
         }
     }
+
+    public static class AppointmentConstraint extends Exception{
+        public AppointmentConstraint(){
+            super();
+        }
+    }
+
 }

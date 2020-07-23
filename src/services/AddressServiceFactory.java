@@ -2,7 +2,7 @@ package services;
 
 public class AddressServiceFactory implements IServiceFactory<AddressService> {
 
-    private AddressService instance;
+    private static AddressService instance;
 
     @Override
     public AddressService getInstance() {

@@ -11,16 +11,16 @@ import java.util.ResourceBundle;
 
 public class Main extends Application {
 
-    private Locale userLocale; //Users location
     private ResourceBundle rb; //Loaded Resource bundled
     private SceneManager sceneManager; //Manages loading and unloading scenes
 
     @Override
     public void init() throws Exception {
 
-        userLocale = Locale.getDefault(); //Get the users location
+        //Users location
+        Locale userLocale = Locale.getDefault(); //Get the users location
 
-        rb = ResourceBundle.getBundle("scheduler",userLocale); //Load appropriate resource bundle
+        rb = ResourceBundle.getBundle("scheduler", userLocale); //Load appropriate resource bundle
 
         super.init();
     }
@@ -39,11 +39,11 @@ public class Main extends Application {
         JavaFXScene<CustomerController> customerView= new JavaFXScene<>("customerView","CustomerView.fxml");
         JavaFXScene<CalenderController> calenderView = new JavaFXScene<>("calenderView","CalenderView.fxml");
         JavaFXScene<MainController> mainView= new JavaFXScene<>("mainView","MainView.fxml");
-        JavaFXScene<AppointmentController> appointmentView= new JavaFXScene<>("appointmentView","appointmentView.fxml");
+        JavaFXScene<AppointmentController> appointmentView= new JavaFXScene<>("appointmentView","AppointmentView.fxml");
 
         //Set Resource Bundle on Scene
         loginView.setResourceBundle(rb);
-        customerView.setResourceBundle(rb);
+
         //Load in the FXML Views and sets up the different Scenes
         SceneManager.loadSceneWithResource(loginView); // Login Scene
         SceneManager.loadScene(customerView);

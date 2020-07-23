@@ -51,6 +51,7 @@ public class CustomerDialogueController implements Initializable {
         //Set combobox Items
         citiesCBox.setItems(FXCollections.observableArrayList(addrService.getCities().values()));
         countriesCBox.setItems(FXCollections.observableArrayList(addrService.getCountries().values()));
+        countriesCBox.setDisable(true);
 
         //TODO Add listener to telephone textField to ensure only numbers are entered and text is formated as xxx-xxx-xxxx
 
@@ -60,7 +61,7 @@ public class CustomerDialogueController implements Initializable {
     public void onAddCustomer(ActionEvent action) {
 
         Address newAddress = new Address(address.getText(),addressLine.getText(),postalCode.getText(),telephone.getText(),
-                            citiesCBox.getSelectionModel().getSelectedItem().getId(), countriesCBox.getSelectionModel().getSelectedItem().getId());
+                            citiesCBox.getSelectionModel().getSelectedItem());
 
         Customer customer = new Customer(customerName.getText(),newAddress);
 
@@ -79,8 +80,7 @@ public class CustomerDialogueController implements Initializable {
         customer.getAddress().setAddressline(addressLine.getText());
         customer.getAddress().setPostalCode(postalCode.getText());
         customer.getAddress().setPhone(telephone.getText());
-//        customer.getAddress().setCity(citiesCBox.getSelectionModel().getSelectedItem());
-//        customer.getAddress().setCountry(countriesCBox.getSelectionModel().getSelectedItem());
+        customer.getAddress().setCity(citiesCBox.getSelectionModel().getSelectedItem());
 
         try {
             custService.updateCustomer(customer);
@@ -109,7 +109,7 @@ public class CustomerDialogueController implements Initializable {
         postalCode.setText(customer.getAddress().getPostalCode());
         telephone.setText(customer.getAddress().getPhone());
         citiesCBox.getSelectionModel().select(customer.getAddress().getCity());
-        countriesCBox.getSelectionModel().select(customer.getAddress().getCountry());
+        countriesCBox.getSelectionModel().select(customer.getAddress().getCity().getCountry());
 
         //Set Save button label to Edit
         saveBtn.setText("Save");
@@ -117,6 +117,11 @@ public class CustomerDialogueController implements Initializable {
         saveBtn.setOnAction(this::onEditCustomer);
     }
 
-
-
+    /**
+     * When cities combo box changes selection selected country automatically changes to appropriate country
+     * @param actionEvent
+     */
+    public void changeCity(ActionEvent actionEvent) {
+        countriesCBox.getSelectionModel().select(citiesCBox.getSelectionModel().getSelectedItem().getCountry());
+    }
 }

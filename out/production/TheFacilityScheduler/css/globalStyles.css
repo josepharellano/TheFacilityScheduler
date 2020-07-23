@@ -16,6 +16,11 @@
    -fx-fill: #455a64;
 }
 
+#label{
+   -fx-font-size: 18px;
+   -fx-font-weight: bold;
+}
+
 .button {
     -fx-min-width: 100px;
     -fx-min-height: 35px;
@@ -31,4 +36,7 @@
 
 .button:hover {
     -fx-background-color: #b0bec5;
+}
+.combo-box:disabled, .combo-box:disabled > * {
+  -fx-opacity: 1.0 ;
 }

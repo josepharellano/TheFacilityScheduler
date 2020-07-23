@@ -2,34 +2,35 @@ package models;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Objects;
 
-public class Address {
+public class Address implements IModel {
     Integer id;
     String address;
     String addressLine;
     String postalCode;
     String phone;
     City city;
-    Country country;
 
-    public Address(int id, String address,String addressLine,String postalCode,String phone,City city,Country country){
+
+    public Address(int id, String address,String addressLine,String postalCode,String phone,City city){
         this.id = id;
         this.address = address;
         this.addressLine = addressLine;
         this.postalCode = postalCode;
         this.phone = phone;
         this.city = city;
-        this.country = country;
+
     }
 
-    public Address(String address,String addressLine,String postalCode,String phone, City city, Country country){
+    public Address(String address,String addressLine,String postalCode,String phone, City city){
         this.id = null;
         this.address = address;
         this.addressLine = addressLine;
         this.postalCode = postalCode;
         this.phone = phone;
         this.city = city;
-        this.country = country;
+
     }
 
     public Address(int id){
@@ -39,11 +40,10 @@ public class Address {
         this.postalCode = null;
         this.phone = null;
         this.city = null;
-        this.country = null;
     }
 
     //Getters
-    public int getId(){
+    public Integer getId(){
         return this.id;
     }
     public String getAddress(){
@@ -61,9 +61,7 @@ public class Address {
     public City getCity(){
         return this.city;
     }
-    public Country getCountry(){
-        return this.country;
-    }
+
 
     //Setters
     public void setId(int id){this.id = id;}
@@ -72,36 +70,48 @@ public class Address {
     public void setPhone(String phone){ this.phone = phone;}
     public void setPostalCode(String postalCode){this.postalCode = postalCode;}
     public void setCity(Address.City city){ this.city = city;}
-    public void setCountry(Address.Country country){ this.country = country;}
+
 
     @Override
     public String toString() {
         return "[ ID: " + this.id + " Address: " + this.address + " Line 2: " + this.addressLine + " Phone: " + this.phone +
-                " City: " + this.city + " Country: " + this.country + " Postal Code: " + this.postalCode + " ]";
+                " City: " + this.city + " Postal Code: " + this.postalCode + " ]";
 
     }
 
     @Override
-    public boolean equals(Object obj){
-        if(!(obj instanceof Address)) return false;
-        Address otherAddress = (Address) obj;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address1 = (Address) o;
+        return id.equals(address1.id) &&
+                address.equals(address1.address) &&
+                addressLine.equals(address1.addressLine) &&
+                postalCode.equals(address1.postalCode) &&
+                phone.equals(address1.phone) &&
+                city.equals(address1.city);
+    }
 
-        return this.address.equals(otherAddress.getAddress()) && this.phone.equals(otherAddress.getPhone()) && (this.city == otherAddress.getCity())
-                && this.getAddressLine().equals(otherAddress.getAddressLine()) && this.postalCode.equals(otherAddress.getPostalCode());
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public static class City {
         int id;
         String name;
+        Country country;
 
-        public City(int id, String name){
+        public City(int id, String name,Country country){
             this.id = id;
             this.name = name;
+            this.country = country;
         }
 
         //Getters
         public int getId(){return this.id;}
         public String getName(){return this.name;}
+        public Country getCountry(){ return this.country;}
 
         @Override
         public String toString(){

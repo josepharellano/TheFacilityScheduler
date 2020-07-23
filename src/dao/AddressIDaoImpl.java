@@ -10,6 +10,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -82,10 +83,10 @@ public class AddressIDaoImpl implements  IDao<Address>{
      * @throws SQLException
      */
     @Override
-    public List<Address> selectAll() throws SQLException {
+    public HashMap<Integer,Address> selectAll() throws SQLException {
 
         //List of addresses
-        List<Address> addresses = new ArrayList<>();
+        HashMap<Integer,Address> addresses = new HashMap<>();
 
         String sqlQuery = "SELECT addr.addressId,addr.address,addr.address2,addr.postalCode,addr.phone, addr.cityId,city.city, city.countryId, country.country " +
                 "FROM address addr " +
@@ -112,70 +113,44 @@ public class AddressIDaoImpl implements  IDao<Address>{
                 String country = rs.getString(9);
 
                 Address addr = new Address(id,address,addressLine,postalCode,telephone,
-                        new Address.City(cityId,city),new Address.Country(countryId,country));
-                addresses.add(addr);
+                        new Address.City(cityId,city,new Address.Country(countryId,country)));
+                addresses.put(id,addr);
             }
         }
         return addresses;
     }
 
-    /**
-     * Retrieves all cities from database.
-     * @return List of Cities
-     * @throws SQLException
-     */
-    public List<Address.City> getCities() throws SQLException {
-
-        List<Address.City> cities = new ArrayList<>(); //List of cities
-        //SQL Query Statement
-        String sqlQuery = "SELECT * FROM " + Constants.CITY_TABLE;
-
-
-        try(Connection conn = DBConnection.startConnection()){
-            PreparedStatement ps = DBQuery.setPreparedStatement(conn,sqlQuery);
-            DBQuery.makeQuery();
-
-            ResultSet rs = DBQuery.getResultSet();
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-
-                Address.City city = new Address.City(id,name);
-
-                cities.add(city);
-            }
-        }
-
-        return cities;
-    }
-
-    /**
-     * Retreives countries from database.
-     * @return List of Countries
-     * @throws SQLException
-     */
-    public List<Address.Country> getCountries() throws SQLException {
-
-        List<Address.Country> countries = new ArrayList<>(); //List of cities
-        //SQL Query Statement
-        String sqlQuery = "SELECT * FROM " + Constants.COUNTRY_TABLE;
-
-
-        try(Connection conn = DBConnection.startConnection()){
-            PreparedStatement ps = DBQuery.setPreparedStatement(conn,sqlQuery);
-            DBQuery.makeQuery();
-
-            ResultSet rs = DBQuery.getResultSet();
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String name = rs.getString(2);
-
-                Address.Country country = new Address.Country(id,name);
-
-                countries.add(country);
-            }
-        }
-        return countries;
-    }
+//    /**
+//     * Retrieves all cities from database.
+//     * @return List of Cities
+//     * @throws SQLException
+//     */
+//    public HashMap<Integer,Address.City> getCities() throws SQLException {
+//
+//        HashMap<Integer,Address.City> cities = new HashMap<>(); //List of cities
+//        //SQL Query Statement
+//        String sqlQuery = "SELECT city.cityId, city.city,country.country,country.countryId FROM " + Constants.CITY_TABLE +
+//                            "INNER JOIN country ON city.countryId = country.countryId";
+//
+//
+//        try(Connection conn = DBConnection.startConnection()){
+//            PreparedStatement ps = DBQuery.setPreparedStatement(conn,sqlQuery);
+//            DBQuery.makeQuery();
+//
+//            ResultSet rs = DBQuery.getResultSet();
+//            while (rs.next()) {
+//                int id = rs.getInt(1);
+//                String name = rs.getString(2);
+//                String country = rs.getString(3);
+//                int countryId = rs.getInt(4);
+//
+//                Address.City city = new Address.City(id,name,new Address.Country(countryId,country));
+//
+//                cities.put(id,city);
+//            }
+//        }
+//
+//        return cities;
+//    }
 }
 

@@ -66,6 +66,7 @@ public class SceneManager {
         if(SceneManager.scenes.containsKey(name)) {
             System.out.println("Load Scene " + name);
             //Set Main scene root to the requested scene root
+            System.out.println(SceneManager.scenes.get(name).getRoot());
             SceneManager.main.setRoot(SceneManager.scenes.get(name).getRoot());
 //            SceneManager.primaryStage.setScene(scenes.get(name).getScene());
         }else throw new MissingScene();

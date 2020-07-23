@@ -34,30 +34,27 @@ public class CityIDaoImpl implements IDao<Address.City> {
 
     @Override
     public HashMap<Integer, Address.City> selectAll() throws SQLException {
-
-        HashMap<Integer,Address.City> cities = new HashMap<>();
-
-        final String sqlQuery = "SELECT cityId,city,countryId FROM " + Constants.CITY_TABLE;
-
-        //Query Database
-        try(Connection conn = DBConnection.startConnection()){
+        HashMap<Integer, Address.City> cities = new HashMap<>(); //List of cities
+        //SQL Query Statement
+        String sqlQuery = "SELECT city.cityId, city.city,country.country,country.countryId FROM " + Constants.CITY_TABLE +
+                " INNER JOIN country ON city.countryId = country.countryId";
 
 
-            PreparedStatement ps = DBQuery.setPreparedStatement(conn,sqlQuery); //Set Query Statement
+        try (Connection conn = DBConnection.startConnection()) {
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn, sqlQuery);
             DBQuery.makeQuery();
 
             ResultSet rs = DBQuery.getResultSet();
-
             while (rs.next()) {
+                int id = rs.getInt(1);
+                String name = rs.getString(2);
+                String country = rs.getString(3);
+                int countryId = rs.getInt(4);
 
-                int cityId = rs.getInt(1);
-                String cityName = rs.getString(2);
-                int countryId = rs.getInt(3);
+                Address.City city = new Address.City(id, name, new Address.Country(countryId, country));
 
-                Address.City city = new Address.City(cityId,cityName);
-                cities.put(cityId,city);
+                cities.put(id, city);
             }
-
         }
         return cities;
     }

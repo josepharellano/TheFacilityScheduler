@@ -1,36 +1,43 @@
 package services;
 
 import dao.AddressIDaoImpl;
+import dao.CityIDaoImpl;
+import dao.CountryIDaoImpl;
 import models.Address;
 
 import java.sql.SQLException;
-import java.util.List;
+import java.util.HashMap;
 
-public class AddressService {
+public class AddressService extends Service<Address> {
 
-    AddressIDaoImpl dao;
+    CityIDaoImpl citydao;
+    CountryIDaoImpl countrydao;
+
     private static AddressService instance;
-    List<Address> addresses;
-    List<Address.City> cities;
-    List<Address.Country> countries;
+    HashMap<Integer,Address> addresses;
+    HashMap<Integer,Address.City> cities;
+    HashMap<Integer,Address.Country> countries;
 
-    private AddressService (){
-        dao = new AddressIDaoImpl();
-    }
+    protected AddressService (){
+        super(new AddressIDaoImpl());
+        citydao = new CityIDaoImpl();
+        countrydao = new CountryIDaoImpl();
 
-    public static AddressService getInstance() {
-        if (instance == null) {
-            instance = new AddressService();
+
+        try {
+            refreshAddressData();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        return instance;
     }
 
     public void refreshAddressData() throws SQLException {
-        addresses = dao.selectAll();
-        cities = dao.getCities();
-        countries = dao.getCountries();
+        addresses = this.dao.selectAll();
+        cities = citydao.selectAll();
+        countries = countrydao.selectAll();
     }
 
+    //TODO: Change out creator with user
     public int newAddress(Address address) throws SQLException {
         return dao.insert(address,"Test");
     }
@@ -39,17 +46,14 @@ public class AddressService {
     //Checks to see if the address is in the database already.
     //TODO EdgeCase: Address list contains stale data.
     public boolean dbContainsAddress(Address address){
-        return addresses.contains(address);
+        return addresses.containsValue(address);
     }
-    public List<Address.City> getCities(){
+
+    //Getters
+    public HashMap<Integer,Address.City> getCities(){
         return cities;
     }
-
-    public List<Address.Country> getCountries(){
+    public HashMap<Integer, Address.Country> getCountries() {
         return countries;
     }
-
-
-
-
 }

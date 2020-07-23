@@ -2,12 +2,14 @@ package controllers;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -22,6 +24,7 @@ import services.ServiceFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -57,12 +60,15 @@ public class CustomerController implements Initializable {
     private Text statusMessages; //Status Message Updates.
 
     private CustomerService service; //Customer Business Logic
-    private AddressService addrService //Address
+    private AddressService addrService; //Address
+
+    private ObservableList<Customer> customers;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         service = (CustomerService) ServiceFactory.getService(new CustomerServiceFactory());
+        customers = FXCollections.observableArrayList(service.getData().values());
         setUpCustomerTable(); //Sets up Customer Table
         updateCustomerData();//Populate Table Data
     }
@@ -71,7 +77,8 @@ public class CustomerController implements Initializable {
      * Setup the Customer Table View
      */
     private void setUpCustomerTable(){
-
+        System.out.println(customers);
+        customerTable.setItems(customers);
 
         //Wire columns to customer properties
         customerId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -80,62 +87,40 @@ public class CustomerController implements Initializable {
          * Lambda expressions are needed on the following in order to retrieve the properties of the nested Address Object.
          * setCellValueFactory takes a callback of CellDataFeatures<Customer,String> and returns ObservableValue
          */
-        telephone.setCellValueFactory(addressId -> new SimpleStringProperty(addressData.getValue().getAddress().getPhone()));
-//        address.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getAddress()));
-//        addressLine.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getAddressLine()));
-//        city.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCity().getName()));
-//        country.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCountry().getName()));
-//        postalCode.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getPostalCode()));
+        telephone.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getPhone()));
+        address.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getAddress()));
+        addressLine.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getAddressLine()));
+        city.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCity().getName()));
+        country.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getCity().getCountry().getName()));
+        postalCode.setCellValueFactory(addressData -> new SimpleStringProperty(addressData.getValue().getAddress().getPostalCode()));
 
-        /*
-         * Allows a columns of the table to resize at fixed ratios depending on table width.
-         * A lambda is used in place of a Callback class for sake of simplicity.
-         */
-        customerTable.setColumnResizePolicy(resizeFeatures->{
-            TableView<?> table = resizeFeatures.getTable(); //Customer Table View
-            double tableWidth = table.getWidth();   //Width of Table
-            List<TableColumn<?,?>> columns = new ArrayList<>(table.getColumns()); //Get list of Columns in TableView
-            double baseWidth = tableWidth /columns.size();
-
-            //Columns in table
-            columns.get(0).setPrefWidth(tableWidth * .10); //Customer ID
-            columns.get(1).setPrefWidth(tableWidth * .17); //Customer Name
-            columns.get(2).setPrefWidth(tableWidth * .10); //Telephone
-            columns.get(3).setPrefWidth(tableWidth * .16); //Address
-            columns.get(4).setPrefWidth(tableWidth * .16); //Address Line
-            columns.get(5).setPrefWidth(tableWidth * .10); //City
-            columns.get(6).setPrefWidth(tableWidth * .10); //Country
-            columns.get(7).setPrefWidth(tableWidth * .10); //Postal Code
-            return true;
-        });
     }
 
     /**
-     * Updates the Customer data from the database.
+     * Updates the Customer data from the cache.
      */
     private void updateCustomerData(){
-
-        //Set customerTable to observable list of customers from customer service.
-        System.out.println(service.getData());
-        customerTable.setItems(FXCollections.observableArrayList(service.getData().values()));
-
-        //Set Last Update Time
-        //TODO Make Time equal local time as hours not military time.
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm a");
-        lastUpdate.setText("Last Updated:   " + currentDateTime.format(formatter));
+            customers = FXCollections.observableArrayList(service.getData().values());
+            customerTable.setItems(customers);
+            customerTable.refresh();
     }
 
     /**
-     * Refresh stale Customer Data
+     * Updates customer data from the database
      * @param actionEvent
      */
     public void onRefresh(ActionEvent actionEvent) {
         //TODO Add a time limit so database doesn't get spammed by refresh.
-        updateCustomerData();
-
-        //Clear Status Messages
-        statusMessages.setText("");
+        try {
+            service.refreshData();
+            this.updateCustomerData();
+            //TODO Make Time equal local time as hours not military time.
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm a");
+            lastUpdate.setText("Last Updated:   " + currentDateTime.format(formatter));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     /**
@@ -146,19 +131,23 @@ public class CustomerController implements Initializable {
         Customer selected = customerTable.getSelectionModel().getSelectedItem();
 
         //Try to remove selected customer from database.
-        if(service.removeCustomer(selected.getId())){
-            //After remove - data becomes stale refresh data.
-            updateCustomerData();
-            statusMessages.setText("Customer Removed");
-        }else{
-            statusMessages.setText("Failed to Remove Customer");
+        try {
+            if(service.removeCustomer(selected.getId())){
+                updateCustomerData();
+                statusMessages.setText("Customer Removed");
+            }else{
+                statusMessages.setText("Failed to Remove Customer");
+            }
+        } catch (CustomerService.AppointmentConstraint appointmentConstraint) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Customer is currently assigned to an appointment.  Delete appointment to remove this customer.");
+            alert.show();
         }
 
     }
 
     public void onAddCustomer(ActionEvent actionEvent) throws IOException {
         showCustomerDialogue(false,null);
-
         //Refresh stale data
         updateCustomerData();
 
@@ -171,7 +160,6 @@ public class CustomerController implements Initializable {
 
         if(customer != null) {
             showCustomerDialogue(true, customer);
-
             //Refresh stale data
             updateCustomerData();
 
@@ -196,5 +184,6 @@ public class CustomerController implements Initializable {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.showAndWait();
+
     }
 }

@@ -37,3 +37,6 @@
 .button:hover {
     -fx-background-color: #b0bec5;
 }
+.combo-box:disabled, .combo-box:disabled > * {
+  -fx-opacity: 1.0 ;
+}

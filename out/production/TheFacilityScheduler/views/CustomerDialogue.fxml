@@ -30,7 +30,7 @@
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" spacing="10.0">
                     <Label minWidth="150" VBox.vgrow="ALWAYS" alignment="CENTER_RIGHT" text="City"/>
-                    <ComboBox minWidth="150" fx:id="citiesCBox" HBox.hgrow="ALWAYS"/>
+                    <ComboBox minWidth="150" fx:id="citiesCBox" onAction="#changeCity" HBox.hgrow="ALWAYS"/>
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0" spacing="10.0">
                     <Label minWidth="150" VBox.vgrow="ALWAYS" alignment="CENTER_RIGHT" text="Country"/>
@@ -52,5 +52,4 @@
             </VBox>
         </Group>
     </StackPane>
-
 </AnchorPane>

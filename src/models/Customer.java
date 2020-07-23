@@ -45,7 +45,8 @@ public class Customer implements IModel {
 
     //Setters
     public void setName(String name) {this.name = name;}
-    public void setAddressId(Address addressId){ this.address = addressId;}
+    public void setAddress(Address address){ this.address = address;}
+    public void setId(int id){this.id = id;}
 
 
 

@@ -3,7 +3,6 @@ package dao;
 import com.mysql.jdbc.Connection;
 import models.Address;
 import models.Customer;
-import utilities.Constants;
 import utilities.DBConnection;
 import utilities.DBQuery;
 import utilities.SQLHelper;
@@ -40,33 +39,34 @@ public class CustomerIDaoImpl implements IDao<Customer> {
     public Integer insert(Customer record, String creator) throws SQLException {
 
         // Use Try With Resources to handle auto closing of resources.
-     try(Connection conn = DBConnection.startConnection()){
+        try(Connection conn = DBConnection.startConnection()){
 
-         //Set PreparedStatement
-         PreparedStatement ps = DBQuery.setPreparedStatement(conn, SQLHelper.insertRecordSQL(table,insertColumns));
+            //Set PreparedStatement
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn, SQLHelper.insertRecordSQL(table,insertColumns));
 
-         //Build Query Statement
-         ps.setString(1, record.getName());
-         ps.setInt(2,record.getAddress().getId());
-         ps.setBoolean(3,record.isActive());
-         ps.setDate(4, new Date(System.currentTimeMillis()));
-         ps.setString(5,creator);
-         ps.setTimestamp(6,new Timestamp(System.currentTimeMillis()));
-         ps.setString(7,creator);
+            //Build Query Statement
+            ps.setString(1, record.getName());
+            //Testing purposes only
+            ps.setInt(2,record.getAddress().getId());
+            ps.setBoolean(3,record.isActive());
+            ps.setDate(4, new Date(System.currentTimeMillis()));
+            ps.setString(5,creator);
+            ps.setTimestamp(6,new Timestamp(System.currentTimeMillis()));
+            ps.setString(7,creator);
 
-         //Complete Query
-         DBQuery.makeQuery();
+            //Complete Query
+            DBQuery.makeQuery();
 
-         //Return id of the new Customer record
-         ResultSet rs = DBQuery.getPreparedStatement().getGeneratedKeys();
-         if(rs.next()){
-             return rs.getInt(1);
-         }else{
-             //Record failed to be inserted return null.
-             return null;
-         }
+            //Return id of the new Customer record
+            ResultSet rs = DBQuery.getPreparedStatement().getGeneratedKeys();
+            if(rs.next()){
+                return rs.getInt(1);
+            }else{
+                //Record failed to be inserted return null.
+                return null;
+            }
 
-     }
+        }
     }
 
     /**
@@ -98,9 +98,9 @@ public class CustomerIDaoImpl implements IDao<Customer> {
         try(Connection conn = DBConnection.startConnection()){
 
             //Updates will always occur on customerId
-           String condition ="customerId=" + record.getId();
+            String condition ="customerId=" + record.getId();
 
-           //Set PreparedStatement
+            //Set PreparedStatement
             PreparedStatement ps = DBQuery.setPreparedStatement(conn,SQLHelper.updateRecordSQL(table,updateColumns,condition));
 
             //Build Query Statement
@@ -121,14 +121,21 @@ public class CustomerIDaoImpl implements IDao<Customer> {
      * @return Customer retrieved from database.
      */
     @Override
-    public Customer select(String name) {return null;}
+    public Customer select(String name) {
+        return null;
+    }
 
     @Override
     public HashMap<Integer,Customer> selectAll() throws SQLException {
 
         HashMap<Integer,Customer> customers = new HashMap<>();
         // SELECT
-        String sqlQuery = "SELECT customerId, customerName,addressId,active FROM  " + Constants.CUSTOMER_TABLE;
+        String sqlQuery = "SELECT cust.customerId, cust.customerName,addr.addressId,addr.phone, addr.address, addr.address2,city.cityId,city.city,country.countryId, country.country," +
+                "addr.postalCode,cust.active " +
+                "FROM customer as cust " +
+                "INNER JOIN address as addr ON cust.addressId = addr.addressId " +
+                "INNER JOIN city ON addr.cityId = city.cityId " +
+                "INNER JOIN country ON city.countryId = country.countryId";
 
         try(Connection conn = DBConnection.startConnection()) {
 
@@ -142,13 +149,23 @@ public class CustomerIDaoImpl implements IDao<Customer> {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
                 int addressId = rs.getInt(3);
+                String phone= rs.getString(4);
+                String address = rs.getString(5);
+                String addressLine = rs.getString(6);
                 int cityId = rs.getInt(7);
+                String city = rs.getString(8);
+                int countryId = rs.getInt(9);
+                String country = rs.getString(10);
+                String postalCode = rs.getString(11);
                 boolean isActive = rs.getBoolean(12);
 
-                Customer customer = new Customer(id,name,addressId,isActive);
+                Address addr = new Address(addressId,address,addressLine,postalCode,phone,new Address.City(cityId,city,new Address.Country(countryId,country)));
+                Customer customer = new Customer(id,name,addr,isActive);
+                System.out.println(customer);
                 customers.put(id,customer);
             }
+
         }
         return customers;
     }
-    }
+}

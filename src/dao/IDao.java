@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,5 +23,5 @@ public interface IDao<T> {
     public T select(String name) throws SQLException;
 
     //Select All Records from database
-    public List<T> selectAll() throws SQLException;
+    public HashMap<Integer,T> selectAll() throws SQLException;
 }

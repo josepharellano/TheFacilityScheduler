@@ -42,7 +42,6 @@ public class LoginController implements Initializable {
             userService.login(username.getText(), password.getText());
 
             //If successful load next screen.
-
             SceneManager.setScene("mainView");
 
         }catch(UserService.InvalidUserNameEx ex){
