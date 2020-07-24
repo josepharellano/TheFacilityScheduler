@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import models.Address;
 import models.Customer;
 import services.*;
+import utilities.Exceptions;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -68,7 +69,7 @@ public class CustomerDialogueController implements Initializable {
         try {
            custService.addCustomer(customer);
            onClose(action);
-        } catch (CustomerService.EmptyInputValue | SQLException ex) {
+        } catch (Exceptions.EmptyInputValue | SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
@@ -84,7 +85,7 @@ public class CustomerDialogueController implements Initializable {
 
         try {
             custService.updateCustomer(customer);
-        } catch (CustomerService.EmptyInputValue | SQLException ex) {
+        } catch (Exceptions.EmptyInputValue | SQLException ex) {
             System.out.println(ex.getMessage());
         }
         onClose(action);

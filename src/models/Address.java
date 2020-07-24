@@ -46,6 +46,12 @@ public class Address implements IModel {
     public Integer getId(){
         return this.id;
     }
+
+    @Override
+    public String getLabel() {
+        return null;
+    }
+
     public String getAddress(){
         return this.address;
     }

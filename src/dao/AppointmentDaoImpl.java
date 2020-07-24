@@ -53,28 +53,52 @@ public class AppointmentDaoImpl implements IDao<Appointment> {
             ResultSet rs = DBQuery.getResultSet();
 
             while(rs.next()){
-                int id = rs.getInt(1);  //Appointment Id
-                int customerId = rs.getInt(2); // Customer ID
-                int userId = rs.getInt(3); //User ID
-                String title = rs.getString(4); //Title of Appointment
-                String desc = rs.getString(5); //Description of Appointment
-                String location = rs.getString(6); // Location of Appointment
-                String contact = rs.getString(7); //Contact name for appointment
-                String type = rs.getString(8); //Appointment Type
-                String url = rs.getString(9);// Link to online meeting room
-                String start = rs.getString(10);
-                String end = rs.getString(11); //End time of meeting
-
-                //Create a LocalDateTime from String -> ZonedDateTime at UTC and adjust ZonedDateTime to System Zone
-                DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
-                ZonedDateTime zdtStart = LocalDateTime.parse(start,df).atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault());
-                ZonedDateTime zdtEnd = LocalDateTime.parse(end,df).atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault());
-
-                Appointment appointment = new Appointment(id,userId,customerId,title,desc,contact,type,zdtStart,zdtEnd,url);
-                appointments.put(id,appointment);
-
+                Appointment appointment = getAppointmentFromResultSet(rs);
+                appointments.put(appointment.getId(),appointment);
             }
         }
         return appointments;
+    }
+
+    public List<Appointment> selectByConsultant(int consultantID) throws SQLException{
+
+        List<Appointment> consultantAppointments = new ArrayList<>();
+
+        String sqlQuery = "SELECT appointmentId,customerId,userId,title,description,location,contact,type,url,start,end FROM " + Constants.APPOINTMENT_TABLE +
+                            "WHERE userId =" + consultantID;
+
+        try(Connection conn = DBConnection.startConnection()){
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn,sqlQuery);
+            DBQuery.makeQuery();
+
+            ResultSet rs = DBQuery.getResultSet();
+
+            while(rs.next()){
+                consultantAppointments.add(getAppointmentFromResultSet(rs));
+            }
+            return consultantAppointments;
+        }
+
+    }
+
+    private Appointment getAppointmentFromResultSet(ResultSet rs) throws SQLException {
+        int id = rs.getInt(1);  //Appointment Id
+        int customerId = rs.getInt(2); // Customer ID
+        int userId = rs.getInt(3); //User ID
+        String title = rs.getString(4); //Title of Appointment
+        String desc = rs.getString(5); //Description of Appointment
+        String location = rs.getString(6); // Location of Appointment
+        String contact = rs.getString(7); //Contact name for appointment
+        String type = rs.getString(8); //Appointment Type
+        String url = rs.getString(9);// Link to online meeting room
+        String start = rs.getString(10);
+        String end = rs.getString(11); //End time of meeting
+
+        //Create a LocalDateTime from String -> ZonedDateTime at UTC and adjust ZonedDateTime to System Zone
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        ZonedDateTime zdtStart = LocalDateTime.parse(start,df).atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault());
+        ZonedDateTime zdtEnd = LocalDateTime.parse(end,df).atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault());
+
+        return new Appointment(id,userId,customerId,title,desc,contact,type,location,zdtStart,zdtEnd,url);
     }
 }

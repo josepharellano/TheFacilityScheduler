@@ -2,6 +2,7 @@ package services;
 
 import dao.UserIDaoImpl;
 import models.User;
+import utilities.Exceptions;
 
 import java.sql.SQLException;
 import java.util.Locale;
@@ -27,7 +28,7 @@ public class UserService {
     }
 
 
-    public void login(String userName, String password) throws InvalidPasswordEx, InvalidUserNameEx{
+    public void login(String userName, String password) throws Exceptions.InvalidPasswordEx, Exceptions.InvalidUserNameEx {
 
         try {
             //Retrieve user from database.
@@ -38,25 +39,17 @@ public class UserService {
                     //Set session user
                     sessionUser = user;
                 }else {
-                    throw new InvalidPasswordEx();
+                    throw new Exceptions.InvalidPasswordEx();
                 }
             }else{
-                throw new InvalidUserNameEx();
+                throw new Exceptions.InvalidUserNameEx();
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
-    public static class InvalidPasswordEx extends Exception{
-        public InvalidPasswordEx(){
-            super("Password does not match!");
-        }
-    }
-
-    public static class InvalidUserNameEx extends Exception{
-        public InvalidUserNameEx(){
-            super("Invalid User Name");
-        }
+    public static User getSessionUser() {
+        return sessionUser;
     }
 }

@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import main.scenemanager.SceneManager;
 import services.UserService;
+import utilities.Exceptions;
 
 import javax.swing.*;
 import java.net.URL;
@@ -44,9 +45,9 @@ public class LoginController implements Initializable {
             //If successful load next screen.
             SceneManager.setScene("mainView");
 
-        }catch(UserService.InvalidUserNameEx ex){
+        }catch(Exceptions.InvalidUserNameEx ex){
             errorStatus.setText(invalidUserName);
-        }catch(UserService.InvalidPasswordEx ex){
+        }catch(Exceptions.InvalidPasswordEx ex){
             errorStatus.setText(invalidPassword);
         } catch (SceneManager.MissingScene missingScene) {
             missingScene.printStackTrace();

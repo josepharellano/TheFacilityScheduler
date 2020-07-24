@@ -21,6 +21,7 @@ import services.AddressService;
 import services.CustomerService;
 import services.CustomerServiceFactory;
 import services.ServiceFactory;
+import utilities.Exceptions;
 
 import java.io.IOException;
 import java.net.URL;
@@ -138,7 +139,7 @@ public class CustomerController implements Initializable {
             }else{
                 statusMessages.setText("Failed to Remove Customer");
             }
-        } catch (CustomerService.AppointmentConstraint appointmentConstraint) {
+        } catch (Exceptions.AppointmentConstraint appointmentConstraint) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Customer is currently assigned to an appointment.  Delete appointment to remove this customer.");
             alert.show();

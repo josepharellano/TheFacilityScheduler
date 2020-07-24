@@ -26,10 +26,11 @@ public class Appointment implements IModel {
      * @param desc description of the appointment
      * @param contact contact for the appointment
      * @param type of appointment
+     * @param location of appointment
      * @param start date and time of the appointment
      * @param end date and time of the appointment
      */
-    public Appointment(Integer id, int userId, int customerId, String title, String desc, String contact, String type, ZonedDateTime start, ZonedDateTime end, String url) {
+    public Appointment(Integer id, int userId, int customerId, String title, String desc, String contact, String type,String location,ZonedDateTime start, ZonedDateTime end, String url) {
         this.id = id;
         this.userId = userId;
         this.customerId = customerId;
@@ -37,6 +38,7 @@ public class Appointment implements IModel {
         this.desc = desc;
         this.contact = contact;
         this.type = type;
+        this.location = location;
         this.start = start;
         this.end = end;
     }
@@ -49,10 +51,11 @@ public class Appointment implements IModel {
      * @param desc description of the appointment
      * @param contact contact for the appointment
      * @param type of appointment
+     * @param location of appointment
      * @param start date and time of the appointment
      * @param end date and time of the appointment
      */
-    public Appointment(int userId, int customerId, String title, String desc, String contact, String type, ZonedDateTime start, ZonedDateTime end, String url) {
+    public Appointment(int userId, int customerId, String title, String desc, String contact, String type, String location, ZonedDateTime start, ZonedDateTime end, String url) {
         this.id = null;
         this.userId = userId;
         this.customerId = customerId;
@@ -60,6 +63,7 @@ public class Appointment implements IModel {
         this.desc = desc;
         this.contact = contact;
         this.type = type;
+        this.location = location;
         this.start = start;
         this.end = end;
     }
@@ -69,6 +73,11 @@ public class Appointment implements IModel {
     //Getters
     public Integer getId() {
         return id;
+    }
+
+    @Override
+    public String getLabel() {
+        return null;
     }
 
     public int getUser() {
@@ -103,7 +112,10 @@ public class Appointment implements IModel {
         return end;
     }
 
-    //Setters
+    public String getLocation() {
+        return location;
+    }
+//Setters
 
     public void setUser(int userId) {
         this.userId = userId;

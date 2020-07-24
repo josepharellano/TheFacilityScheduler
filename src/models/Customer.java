@@ -39,6 +39,12 @@ public class Customer implements IModel {
         return this.address;
     }
     public Integer getId() {return this.id;}
+
+    @Override
+    public String getLabel() {
+        return this.name;
+    }
+
     public boolean isActive(){
         return this.isActive;
     }

@@ -62,4 +62,9 @@ public class User implements IModel {
     public Integer getId() {
         return this.id;
     }
+
+    @Override
+    public String getLabel() {
+        return null;
+    }
 }

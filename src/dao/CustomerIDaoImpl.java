@@ -161,7 +161,6 @@ public class CustomerIDaoImpl implements IDao<Customer> {
 
                 Address addr = new Address(addressId,address,addressLine,postalCode,phone,new Address.City(cityId,city,new Address.Country(countryId,country)));
                 Customer customer = new Customer(id,name,addr,isActive);
-                System.out.println(customer);
                 customers.put(id,customer);
             }
 

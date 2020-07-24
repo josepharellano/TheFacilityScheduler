@@ -5,6 +5,7 @@ import dao.CustomerIDaoImpl;
 import models.Address;
 import models.Appointment;
 import models.Customer;
+import utilities.Exceptions;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class CustomerService extends Service<Customer> {
     }
 
     //Add Customer to database.
-    public void addCustomer(Customer customer) throws EmptyInputValue, SQLException{
+    public void addCustomer(Customer customer) throws Exceptions.EmptyInputValue, SQLException{
 
        validateCustomerInput(customer);
 
@@ -48,7 +49,7 @@ public class CustomerService extends Service<Customer> {
     }
 
     //Update Customer in database
-    public void updateCustomer(Customer customer) throws EmptyInputValue, SQLException {
+    public void updateCustomer(Customer customer) throws Exceptions.EmptyInputValue, SQLException {
         Address address = customer.getAddress(); //Customer Address
         //validate rest of customer fields
         validateCustomerInput(customer);
@@ -65,32 +66,32 @@ public class CustomerService extends Service<Customer> {
         data.put(customer.getId(),customer);
     }
 
-    public void validateCustomerInput(Customer customer) throws EmptyInputValue{
+    public void validateCustomerInput(Customer customer) throws Exceptions.EmptyInputValue {
 
         Address address = customer.getAddress();
         //Validate City and Country are not null.
         try {
             Objects.requireNonNull(address.getCity());
         }catch(NullPointerException ex){
-            throw new EmptyInputValue("Must Select a City.");
+            throw new Exceptions.EmptyInputValue("Must Select a City.");
         }
         //Validate Remaining fields are not empty
         if(customer.getName().isEmpty()){
-            throw new EmptyInputValue("Must provide a Name.");
+            throw new Exceptions.EmptyInputValue("Must provide a Name.");
         }
         if(address.getAddress().isEmpty()){
-            throw new EmptyInputValue("Must provide an Address.");
+            throw new Exceptions.EmptyInputValue("Must provide an Address.");
         }
 
         if(address.getPostalCode().isEmpty()){
-            throw new EmptyInputValue("Must provide a Postal Code.");
+            throw new Exceptions.EmptyInputValue("Must provide a Postal Code.");
         }
         if(address.getPhone().isEmpty()){
-            throw new EmptyInputValue("Must provide a Telephone Number.");
+            throw new Exceptions.EmptyInputValue("Must provide a Telephone Number.");
         }
     }
 
-    public boolean removeCustomer(int id) throws AppointmentConstraint {
+    public boolean removeCustomer(int id) throws Exceptions.AppointmentConstraint {
 
         try {
             this.dao.delete(id);
@@ -99,24 +100,12 @@ public class CustomerService extends Service<Customer> {
             System.out.println(data);
             return true;
         } catch (MySQLIntegrityConstraintViolationException e) {
-            throw new AppointmentConstraint();
+            throw new Exceptions.AppointmentConstraint();
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
         }
     }
 
-
-    public static class EmptyInputValue extends Exception{
-        public EmptyInputValue(String msg){
-            super(msg);
-        }
-    }
-
-    public static class AppointmentConstraint extends Exception{
-        public AppointmentConstraint(){
-            super();
-        }
-    }
 
 }

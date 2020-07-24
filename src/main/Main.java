@@ -18,7 +18,7 @@ public class Main extends Application {
     public void init() throws Exception {
 
         //Users location
-        Locale userLocale = Locale.getDefault(); //Get the users location
+       Locale userLocale = Locale.getDefault(); //Get the users location
 
         rb = ResourceBundle.getBundle("scheduler", userLocale); //Load appropriate resource bundle
 
@@ -53,7 +53,7 @@ public class Main extends Application {
 
 
         //Set the stage Scene
-        SceneManager.setScene("mainView");
+        SceneManager.setScene("loginView");
 
         //Show the stage
         SceneManager.showStage();

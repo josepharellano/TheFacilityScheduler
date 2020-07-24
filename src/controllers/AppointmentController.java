@@ -1,17 +1,22 @@
 package controllers;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import models.Appointment;
+import models.Customer;
 import models.IModel;
 import services.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -24,7 +29,7 @@ import java.util.ResourceBundle;
 public class AppointmentController implements Initializable {
 
     @FXML
-    public TableView<IModel> appointmentTable;
+    public TableView<Appointment> appointmentTable;
     @FXML
     public TableColumn<Appointment,Integer> appointmentId;
     @FXML
@@ -51,14 +56,12 @@ public class AppointmentController implements Initializable {
         updateAppointments();
     }
 
+    /**
+     * Update Appointments from the cache
+     */
     private void updateAppointments(){
-        try {
-            service.refreshData();
-            appointmentTable.setItems(FXCollections.observableArrayList(service.getData().values()));
-        } catch (SQLException throwables) {
-            //TODO Add error messages to UI
-            throwables.printStackTrace();
-        }
+        appointmentTable.setItems(FXCollections.observableArrayList(service.getData().values()));
+        appointmentTable.refresh();
     }
 
     private void setUpTable(){
@@ -91,6 +94,56 @@ public class AppointmentController implements Initializable {
 
         //Setup Customer Cell as a link to customer.
         customer.setCellFactory(column->new ModelLink());
+    }
+
+    public void onAddAppointment(ActionEvent actionEvent) {
+        try {
+            showEditAddAppointmentDialogue(false,null);
+            updateAppointments();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void onEditAppointment(ActionEvent actionEvent) throws IOException {
+        Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
+
+        if(appointment != null) {
+            showEditAddAppointmentDialogue(true, appointment);
+            //Refresh stale data
+            updateAppointments();
+
+        }else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Must select an appointment to edit first.");
+            alert.show();
+        }
+    }
+
+    public void onRemoveAppointment(ActionEvent actionEvent) {
+    }
+
+    public void onRefreshData(ActionEvent actionEvent) {
+    }
+
+    private void showEditAddAppointmentDialogue(boolean edit, Appointment app) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/EditAppointmentView.fxml"));
+        Parent parent = fxmlLoader.load();
+
+        //If edit is true then setup edit dialogue
+        if (edit) {
+            EditAppointmentController controller = fxmlLoader.getController();
+            controller.setAppointmentEditValues(app);
+        }
+        Scene scene = new Scene(parent, 400,600);
+        //Set stylesheets for the dialogue
+        scene.getStylesheets().add("/css/globalStyles.css");
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.setTitle("Add/Edit Appointment");
+        stage.showAndWait();
     }
 
     /**
