@@ -95,9 +95,7 @@ public class CustomerService extends Service<Customer> {
 
         try {
             this.dao.delete(id);
-            System.out.println(this.data.get(id));
             this.data.remove(id);
-            System.out.println(data);
             return true;
         } catch (MySQLIntegrityConstraintViolationException e) {
             throw new Exceptions.AppointmentConstraint();

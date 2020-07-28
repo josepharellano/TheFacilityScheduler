@@ -5,13 +5,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Spinner?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.Region?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controllers.EditAppointmentController"
@@ -41,6 +42,14 @@
         <Label prefWidth="150" VBox.vgrow="ALWAYS" text="Location"/>
         <TextField prefWidth="200" fx:id="locationField" HBox.hgrow="ALWAYS"/>
     </HBox>
+    <HBox alignment="CENTER" spacing="10.0">
+        <Label prefWidth="150" VBox.vgrow="ALWAYS" text="Contact"/>
+        <TextField prefWidth="200" fx:id="contactField" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox alignment="CENTER" spacing="10.0">
+        <Label prefWidth="150" VBox.vgrow="ALWAYS" text="URL"/>
+        <TextField prefWidth="200" fx:id="urlField" HBox.hgrow="ALWAYS"/>
+    </HBox>
     <VBox alignment="CENTER" spacing="20.0">
         <VBox alignment="CENTER" spacing="10.0">
             <Label  VBox.vgrow="ALWAYS" text="Start Date/Time"/>
@@ -50,11 +59,11 @@
                     <DatePicker fx:id="startDate" HBox.hgrow="ALWAYS"/>
                 </VBox>
                 <VBox alignment="CENTER" spacing="5.0">
-                    <Label alignment="CENTER" text="Hours" />
+                    <Label alignment="CENTER" text="Hour" />
                     <Spinner fx:id="startHourTimeSpinner" />
                 </VBox>
                 <VBox alignment="CENTER" spacing="5.0" >
-                    <Label alignment="CENTER" text="Minutes" />
+                    <Label alignment="CENTER" text="Minute" />
                     <Spinner fx:id="startMinuteTimeSpinner" />
                 </VBox>
                 <VBox alignment="CENTER" spacing="5.0">
@@ -71,11 +80,11 @@
                     <DatePicker fx:id="endDate" HBox.hgrow="ALWAYS"/>
                 </VBox>
                 <VBox alignment="CENTER" spacing="5.0">
-                    <Label alignment="CENTER" text="Hours" />
-                    <Spinner fx:id="endHourTimeSpinner" />
+                    <Label alignment="CENTER" text="Hour" />
+                    <Spinner fx:id="endHourTimeSpinner"/>
                 </VBox>
                 <VBox alignment="CENTER" spacing="5.0">
-                    <Label alignment="CENTER" text="Minutes" />
+                    <Label alignment="CENTER" text="Minute" />
                     <Spinner fx:id="endMinuteTimeSpinner" />
                 </VBox>
                 <VBox alignment="CENTER" spacing="5.0">
@@ -86,7 +95,7 @@
         </VBox>
     </VBox>
     <HBox spacing="25" alignment="CENTER">
-        <Button fx:id="saveBtn" onAction="#onSaveAppointment" text="Add"/>
+        <Button fx:id="saveBtn" onAction="#onSaveAppointment" text="Save"/>
         <Button onAction="#onClose" text="Cancel"/>
     </HBox>
 </VBox>

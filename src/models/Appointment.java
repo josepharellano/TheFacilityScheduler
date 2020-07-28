@@ -7,14 +7,14 @@ import java.time.ZonedDateTime;
 public class Appointment implements IModel {
 
     private Integer id; //Unique Id of the appointment
-    private int userId; //User associated with appointment
-    private int customerId; //Customer the appointment is for
+    private Integer userId; //User associated with appointment
+    private Integer customerId; //Customer the appointment is for
     private String title; //Title of appointment
     private String desc; //Description of appointment
     private String contact; //Appointment contact
     private String type; //Type of appointment
     private String location; //Location of the appointment
-    private URL url; //URL of the appointment
+    private String url; //URL of the appointment
     private ZonedDateTime start; //Start Time of the appointment
     private ZonedDateTime end; //End Time of the appointment
 
@@ -30,7 +30,7 @@ public class Appointment implements IModel {
      * @param start date and time of the appointment
      * @param end date and time of the appointment
      */
-    public Appointment(Integer id, int userId, int customerId, String title, String desc, String contact, String type,String location,ZonedDateTime start, ZonedDateTime end, String url) {
+    public Appointment(Integer id, Integer userId, Integer customerId, String title, String desc, String contact, String type,String location,ZonedDateTime start, ZonedDateTime end, String url) {
         this.id = id;
         this.userId = userId;
         this.customerId = customerId;
@@ -41,6 +41,7 @@ public class Appointment implements IModel {
         this.location = location;
         this.start = start;
         this.end = end;
+        this.url = url;
     }
 
     /**
@@ -55,7 +56,7 @@ public class Appointment implements IModel {
      * @param start date and time of the appointment
      * @param end date and time of the appointment
      */
-    public Appointment(int userId, int customerId, String title, String desc, String contact, String type, String location, ZonedDateTime start, ZonedDateTime end, String url) {
+    public Appointment(Integer userId, Integer customerId, String title, String desc, String contact, String type, String location, ZonedDateTime start, ZonedDateTime end, String url) {
         this.id = null;
         this.userId = userId;
         this.customerId = customerId;
@@ -66,6 +67,7 @@ public class Appointment implements IModel {
         this.location = location;
         this.start = start;
         this.end = end;
+        this.url = url;
     }
 
 
@@ -75,16 +77,20 @@ public class Appointment implements IModel {
         return id;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
     @Override
     public String getLabel() {
         return null;
     }
 
-    public int getUser() {
+    public Integer getUser() {
         return userId;
     }
 
-    public int getCustomer() {
+    public Integer getCustomer() {
         return customerId;
     }
 
@@ -115,7 +121,11 @@ public class Appointment implements IModel {
     public String getLocation() {
         return location;
     }
-//Setters
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    //Setters
 
     public void setUser(int userId) {
         this.userId = userId;
@@ -139,6 +149,14 @@ public class Appointment implements IModel {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override

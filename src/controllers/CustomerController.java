@@ -78,7 +78,6 @@ public class CustomerController implements Initializable {
      * Setup the Customer Table View
      */
     private void setUpCustomerTable(){
-        System.out.println(customers);
         customerTable.setItems(customers);
 
         //Wire columns to customer properties
@@ -104,24 +103,6 @@ public class CustomerController implements Initializable {
             customers = FXCollections.observableArrayList(service.getData().values());
             customerTable.setItems(customers);
             customerTable.refresh();
-    }
-
-    /**
-     * Updates customer data from the database
-     * @param actionEvent
-     */
-    public void onRefresh(ActionEvent actionEvent) {
-        //TODO Add a time limit so database doesn't get spammed by refresh.
-        try {
-            service.refreshData();
-            this.updateCustomerData();
-            //TODO Make Time equal local time as hours not military time.
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm a");
-            lastUpdate.setText("Last Updated:   " + currentDateTime.format(formatter));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
     /**

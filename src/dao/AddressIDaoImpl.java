@@ -2,17 +2,11 @@ package dao;
 
 import com.mysql.jdbc.Connection;
 import models.Address;
-import utilities.Constants;
 import utilities.DBConnection;
 import utilities.DBQuery;
-
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.TimeZone;
+
 
 public class AddressIDaoImpl implements  IDao<Address>{
 
@@ -49,17 +43,16 @@ public class AddressIDaoImpl implements  IDao<Address>{
     /**
      * Method not Implemented as not needed for this application.
      * @param id Id of the address record.
-     * @throws SQLException
+     * @throws SQLException Occurs if there is a problem deleting from database.
      */
     @Override
     public void delete(int id) throws SQLException {
-
     }
 
     /**
      * Method not Implemented as not needed for this application.
-     * @param record
-     * @param updatedBy
+     * @param record Record to be updated.
+     * @param updatedBy User updating this record
      * @throws SQLException
      */
     @Override
@@ -119,38 +112,5 @@ public class AddressIDaoImpl implements  IDao<Address>{
         }
         return addresses;
     }
-
-//    /**
-//     * Retrieves all cities from database.
-//     * @return List of Cities
-//     * @throws SQLException
-//     */
-//    public HashMap<Integer,Address.City> getCities() throws SQLException {
-//
-//        HashMap<Integer,Address.City> cities = new HashMap<>(); //List of cities
-//        //SQL Query Statement
-//        String sqlQuery = "SELECT city.cityId, city.city,country.country,country.countryId FROM " + Constants.CITY_TABLE +
-//                            "INNER JOIN country ON city.countryId = country.countryId";
-//
-//
-//        try(Connection conn = DBConnection.startConnection()){
-//            PreparedStatement ps = DBQuery.setPreparedStatement(conn,sqlQuery);
-//            DBQuery.makeQuery();
-//
-//            ResultSet rs = DBQuery.getResultSet();
-//            while (rs.next()) {
-//                int id = rs.getInt(1);
-//                String name = rs.getString(2);
-//                String country = rs.getString(3);
-//                int countryId = rs.getInt(4);
-//
-//                Address.City city = new Address.City(id,name,new Address.Country(countryId,country));
-//
-//                cities.put(id,city);
-//            }
-//        }
-//
-//        return cities;
-//    }
 }
 

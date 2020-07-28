@@ -5,6 +5,9 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 
 <?import java.net.URL?>
 <BorderPane xmlns="http://javafx.com/javafx"

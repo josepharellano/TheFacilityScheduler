@@ -28,23 +28,14 @@ import java.util.ResourceBundle;
 
 public class AppointmentController implements Initializable {
 
-    @FXML
     public TableView<Appointment> appointmentTable;
-    @FXML
     public TableColumn<Appointment,Integer> appointmentId;
-    @FXML
     public TableColumn<Appointment,Integer> consultant;
-    @FXML
     public TableColumn<Appointment,Integer> customer;
-    @FXML
     public TableColumn<Appointment,String> title;
-    @FXML
     public TableColumn<Appointment,String> desc;
-    @FXML
     public TableColumn<Appointment,String> type;
-    @FXML
     public TableColumn<Appointment, ZonedDateTime> start;
-    @FXML
     public TableColumn<Appointment,ZonedDateTime> end;
 
     AppointmentService service;
@@ -77,8 +68,10 @@ public class AppointmentController implements Initializable {
         //Set Format for Start and End Times.
         start.setCellFactory(column-> new LocalTimeCell());
         end.setCellFactory(column-> new LocalTimeCell());
-//        end.setCellFactory(column-> new LocalTimeCell());
-        //Setup Consultant cell to display Name and not ID
+        /**
+         *      Setup Consultant cell to display Name and not ID A lambda expression is used here so I do not have to create another class in order
+         *      to change how the item is displayed when it is updated.  Unlike the start and end cells in which I created a LocalTimeCell class to handle those.
+         */
         consultant.setCellFactory((column)->{
             return new TableCell<Appointment,Integer>(){
                 @Override
@@ -113,7 +106,6 @@ public class AppointmentController implements Initializable {
             showEditAddAppointmentDialogue(true, appointment);
             //Refresh stale data
             updateAppointments();
-
         }else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Must select an appointment to edit first.");
@@ -121,7 +113,17 @@ public class AppointmentController implements Initializable {
         }
     }
 
-    public void onRemoveAppointment(ActionEvent actionEvent) {
+    public void onRemoveAppointment(ActionEvent actionEvent) throws SQLException {
+        Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
+
+        if(appointment != null){
+            service.removeAppointment(appointment);
+            updateAppointments();
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Must choose an appointment to remove");
+            alert.showAndWait();
+        }
     }
 
     public void onRefreshData(ActionEvent actionEvent) {

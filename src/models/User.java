@@ -18,7 +18,10 @@ public class User implements IModel {
      * @param name Name of the User
      * @param isActive Is the user Active and able to log into the system.
      */
-    public User(int id, String password, String name,boolean isActive){
+    public User(int id, String password, String name,boolean isActive)
+    {
+        this.id = id;
+        this.name = name;
         this.isActive = isActive;
         this.password = password;
     }

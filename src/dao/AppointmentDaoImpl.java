@@ -5,6 +5,7 @@ import models.Appointment;
 import utilities.Constants;
 import utilities.DBConnection;
 import utilities.DBQuery;
+import utilities.SQLHelper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,26 +13,93 @@ import java.sql.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class AppointmentDaoImpl implements IDao<Appointment> {
 
+    //Columns used to insert record
+    private static final List<String> insertColumns = Arrays.asList("customerId","userId","title","description","location","contact","type","url","start","end",
+                                                     "createDate","createdBy","lastUpdate","lastUpdateBy");
+
+    //Columns used to update record
+    private static final List<String> updateColumns = Arrays.asList("customerId","userId","title","description","location","contact","type","url","start","end",
+                                                                    "lastUpdate","lastUpdateBy");
+
     @Override
     public Integer insert(Appointment record, String creator) throws SQLException {
-        return null;
+
+        try(Connection conn = DBConnection.startConnection()){
+
+            //Create PreparedStatement
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn, SQLHelper.insertRecordSQL(Constants.APPOINTMENT_TABLE,insertColumns));
+            //Build Query Statement
+            ps.setInt(1,record.getCustomer());
+            ps.setInt(2,record.getUser());
+            ps.setString(3,record.getTitle());
+            ps.setString(4,record.getDesc());
+            ps.setString(5,record.getLocation());
+            ps.setString(6,record.getContact());
+            ps.setString(7,record.getType());
+            ps.setString(8,record.getUrl());
+            ps.setTimestamp(9,Timestamp.valueOf(record.getStart().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+            ps.setTimestamp(10,Timestamp.valueOf(record.getEnd().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+            ps.setTimestamp(11,Timestamp.valueOf(ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+            ps.setString(12,creator);
+            ps.setTimestamp(13,Timestamp.valueOf(ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+            ps.setString(14,creator);
+
+            //Make Query
+            DBQuery.makeQuery();
+
+            //Return the ID of the new appointment record
+            ResultSet rs = DBQuery.getPreparedStatement().getGeneratedKeys();
+            if(rs.next()){
+                return rs.getInt(1);
+            }else{
+                return null;
+            }
+        }
     }
 
     @Override
     public void delete(int id) throws SQLException {
-
+        try(Connection conn = DBConnection.startConnection()) {
+            //Deletions will always occur on customerId
+            String condition = "appointmentId =" + id;
+            //Set PreparedStatement
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn, SQLHelper.deleteRecordsSQL(Constants.APPOINTMENT_TABLE,condition));
+            //Complete Query
+            DBQuery.makeQuery();
+        }
     }
 
     @Override
     public void update(Appointment record, String updatedBy) throws SQLException {
+        try(Connection conn = DBConnection.startConnection()){
 
+            //Updates will always occur on customerId
+            String condition ="appointmentId=" + record.getId();
+
+            //Set PreparedStatement
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn,SQLHelper.updateRecordSQL(Constants.APPOINTMENT_TABLE,updateColumns,condition));
+
+            //Build Query Statement
+            ps.setInt(1,record.getCustomer());
+            ps.setInt(2,record.getUser());
+            ps.setString(3,record.getTitle());
+            ps.setString(4,record.getDesc());
+            ps.setString(5,record.getLocation());
+            ps.setString(6,record.getContact());
+            ps.setString(7,record.getType());
+            ps.setString(8,record.getUrl());
+            ps.setTimestamp(9,Timestamp.valueOf(record.getStart().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+            ps.setTimestamp(10,Timestamp.valueOf(record.getEnd().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+            ps.setTimestamp(11,Timestamp.valueOf(ZonedDateTime.now().withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+            ps.setString(12,updatedBy);
+
+            //Make Query
+            DBQuery.makeQuery();
+        }
     }
 
     @Override
@@ -65,7 +133,7 @@ public class AppointmentDaoImpl implements IDao<Appointment> {
         List<Appointment> consultantAppointments = new ArrayList<>();
 
         String sqlQuery = "SELECT appointmentId,customerId,userId,title,description,location,contact,type,url,start,end FROM " + Constants.APPOINTMENT_TABLE +
-                            "WHERE userId =" + consultantID;
+                            " WHERE userId =" + consultantID;
 
         try(Connection conn = DBConnection.startConnection()){
             PreparedStatement ps = DBQuery.setPreparedStatement(conn,sqlQuery);

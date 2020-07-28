@@ -3,6 +3,7 @@ package dao;
 import com.mysql.jdbc.Connection;
 import models.Address;
 import models.Customer;
+import utilities.Constants;
 import utilities.DBConnection;
 import utilities.DBQuery;
 import utilities.SQLHelper;
@@ -18,9 +19,6 @@ import java.util.List;
  * @author Joseph Arellano
  */
 public class CustomerIDaoImpl implements IDao<Customer> {
-
-    //Associated database table name.
-    private static final String table = "customer";
 
     //Columns used for inserting records.
     private static final List<String> insertColumns = Arrays.asList("customerName","addressId","active","createDate",
@@ -42,11 +40,10 @@ public class CustomerIDaoImpl implements IDao<Customer> {
         try(Connection conn = DBConnection.startConnection()){
 
             //Set PreparedStatement
-            PreparedStatement ps = DBQuery.setPreparedStatement(conn, SQLHelper.insertRecordSQL(table,insertColumns));
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn, SQLHelper.insertRecordSQL(Constants.CUSTOMER_TABLE,insertColumns));
 
             //Build Query Statement
             ps.setString(1, record.getName());
-            //Testing purposes only
             ps.setInt(2,record.getAddress().getId());
             ps.setBoolean(3,record.isActive());
             ps.setDate(4, new Date(System.currentTimeMillis()));
@@ -80,7 +77,7 @@ public class CustomerIDaoImpl implements IDao<Customer> {
             //Deletions will always occur on customerId
             String condition = "customerId =" + id;
             //Set PreparedStatement
-            PreparedStatement ps = DBQuery.setPreparedStatement(conn, SQLHelper.deleteRecordsSQL(table,condition));
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn, SQLHelper.deleteRecordsSQL(Constants.CUSTOMER_TABLE,condition));
             //Complete Query
             DBQuery.makeQuery();
         }
@@ -101,7 +98,7 @@ public class CustomerIDaoImpl implements IDao<Customer> {
             String condition ="customerId=" + record.getId();
 
             //Set PreparedStatement
-            PreparedStatement ps = DBQuery.setPreparedStatement(conn,SQLHelper.updateRecordSQL(table,updateColumns,condition));
+            PreparedStatement ps = DBQuery.setPreparedStatement(conn,SQLHelper.updateRecordSQL(Constants.CUSTOMER_TABLE,updateColumns,condition));
 
             //Build Query Statement
             ps.setString(1, record.getName());

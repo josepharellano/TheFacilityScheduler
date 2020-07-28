@@ -93,5 +93,7 @@ public class AutoCompleteTextField<T extends IModel> extends TextField {
     public void setSelection(T selection){
         this.selection = selection;
     }
+    public T getSelectedModel(){ return selection;}
+
 }
 
