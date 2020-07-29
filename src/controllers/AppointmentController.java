@@ -2,7 +2,6 @@ package controllers;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -12,15 +11,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Appointment;
-import models.Customer;
 import models.IModel;
 import services.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.Instant;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -86,7 +81,7 @@ public class AppointmentController implements Initializable {
         });
 
         //Setup Customer Cell as a link to customer.
-        customer.setCellFactory(column->new ModelLink());
+        customer.setCellFactory(column-> new ModelLink());
     }
 
     public void onAddAppointment(ActionEvent actionEvent) {
@@ -151,7 +146,7 @@ public class AppointmentController implements Initializable {
     /**
      * Displays ZonedDateTime in a more readable way.
      */
-    private class LocalTimeCell extends TableCell<Appointment,ZonedDateTime>{
+    private static class LocalTimeCell extends TableCell<Appointment,ZonedDateTime>{
         @Override
         protected void updateItem(ZonedDateTime item, boolean empty) {
             super.updateItem(item, empty);
@@ -162,7 +157,7 @@ public class AppointmentController implements Initializable {
         }
     }
 
-    private class ModelLink extends TableCell<Appointment,Integer>{
+    private static class ModelLink extends TableCell<Appointment,Integer>{
 
         private final Hyperlink link;
         private IModel model;

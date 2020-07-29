@@ -15,18 +15,21 @@
             fx:controller="controllers.CustomerController"
             styleClass="gridPaneWrapper">
     <center>
-        <TableView fx:id="customerTable" minWidth="400" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-            <columns>
-                <TableColumn fx:id="customerId" text="Customer ID" minWidth="150"/>
-                <TableColumn fx:id="customerName" text="Customer Name" minWidth="250"/>
-                <TableColumn fx:id="telephone" text="Telephone" minWidth="150" />
-                <TableColumn fx:id="address" text="Address" minWidth="250"/>
-                <TableColumn fx:id="addressLine" text="Address Line" minWidth="250" />
-                <TableColumn fx:id="city" text="City" minWidth="150"/>
-                <TableColumn fx:id="country" text="Country" minWidth="150" />
-                <TableColumn fx:id="postalCode" text="Postal Code" minWidth="150" />
-            </columns>
-        </TableView>
+        <VBox alignment="TOP_CENTER" spacing="50">
+            <Label styleClass="title" text="Customers"/>
+            <TableView fx:id="customerTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="customerId" text="Customer ID" minWidth="150"/>
+                    <TableColumn fx:id="customerName" text="Customer Name" minWidth="250"/>
+                    <TableColumn fx:id="telephone" text="Telephone" minWidth="150" />
+                    <TableColumn fx:id="address" text="Address" minWidth="250"/>
+                    <TableColumn fx:id="addressLine" text="Address Line" minWidth="250" />
+                    <TableColumn fx:id="city" text="City" minWidth="150"/>
+                    <TableColumn fx:id="country" text="Country" minWidth="150" />
+                    <TableColumn fx:id="postalCode" text="Postal Code" minWidth="150" />
+                </columns>
+            </TableView>
+        </VBox>
     </center>
     <right>
         <VBox styleClass="btnContainer" GridPane.columnIndex="1" GridPane.rowIndex="1">

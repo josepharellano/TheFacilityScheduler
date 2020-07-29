@@ -1,28 +1,23 @@
 package controllers;
 
-import javafx.beans.value.ChangeListener;
+import customcontrols.AutoCompleteTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import main.scenemanager.SceneManager;
 import models.Appointment;
 import models.Customer;
-import models.IModel;
 import services.*;
 
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import utilities.Constants;
-import utilities.Constants.*;
 import utilities.Exceptions;
 
 
@@ -109,11 +104,11 @@ public class EditAppointmentController implements Initializable {
 
 
             int hour = convertToMilitary(startHourTimeSpinner.getValue(), startAmPmTimeSpinner.getValue());
-            LocalDateTime ldt = LocalDateTime.of(startDate.getValue(), LocalTime.of(hour, startMinuteTimeSpinner.getValue(), 0, 0));
+            LocalDateTime ldt = LocalDateTime.of(startDate.getValue(), LocalTime.of(convertToMilitary(hour,startAmPmTimeSpinner.getValue()), startMinuteTimeSpinner.getValue(), 0, 0));
             ZonedDateTime startZDT = ZonedDateTime.of(ldt, ZoneId.systemDefault());
 
             hour = convertToMilitary(endHourTimeSpinner.getValue(), endAmPmTimeSpinner.getValue());
-            ldt = LocalDateTime.of(endDate.getValue(), LocalTime.of(hour, endMinuteTimeSpinner.getValue(), 0, 0));
+            ldt = LocalDateTime.of(endDate.getValue(), LocalTime.of(convertToMilitary(hour,endAmPmTimeSpinner.getValue()), endMinuteTimeSpinner.getValue(), 0, 0));
             ZonedDateTime endZDT = ZonedDateTime.of(ldt, ZoneId.systemDefault());
 
             //Check to see if this is a new appointment or existing appointment
@@ -181,12 +176,11 @@ public class EditAppointmentController implements Initializable {
 
     private int convertToMilitary(int hour,String ampm){
         //Add 12 hours if PM
-        if(ampm.equals("PM")){
+        if(ampm.equals("PM") && hour < 12){
             return hour + 12;
-        }else if(hour == 12){
-            //If AM and hours equals 12 than return 0
-            return 0;
         }
+        if(ampm.equals("AM") && hour == 12) return 0;
+
         return hour;
     }
 

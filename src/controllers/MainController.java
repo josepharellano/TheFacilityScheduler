@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
 import main.scenemanager.SceneManager;
+import services.AppointmentServiceFactory;
+import services.ServiceFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,7 +19,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //Initialize Main Scene with Appointment View
-        mainPane.setCenter(SceneManager.getSceneRoot("appointmentView"));
+        mainPane.setCenter(SceneManager.getSceneRoot("calendarView"));
     }
 
     public void clickCustomerTab(ActionEvent actionEvent) {
@@ -31,6 +33,9 @@ public class MainController implements Initializable {
     }
 
     public void clickCalenderTab(ActionEvent actionEvent) {
+        //Update Scene Data before switching scenes
+        ((CalendarController)SceneManager.getScene("calendarView").getController()).refreshData();
+        mainPane.setCenter(SceneManager.getSceneRoot("calendarView"));
     }
 
     public void clickReportTab(ActionEvent actionEvent) {

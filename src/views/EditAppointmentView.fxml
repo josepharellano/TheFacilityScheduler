@@ -13,6 +13,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.Button?>
+<?import customcontrols.AutoCompleteTextField?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controllers.EditAppointmentController"
@@ -24,7 +25,7 @@
     </HBox>
     <HBox alignment="CENTER" spacing="10.0">
         <Label  prefWidth="150"  VBox.vgrow="ALWAYS" text="Customer"/>
-        <AutoCompleteTextField  prefWidth="200" fx:id="customers" HBox.hgrow="ALWAYS"/>
+        <AutoCompleteTextField prefWidth="200" fx:id="customers" HBox.hgrow="ALWAYS"/>
     </HBox>
     <HBox alignment="CENTER" spacing="10.0">
         <Label  prefWidth="150" VBox.vgrow="ALWAYS" text="Title"/>

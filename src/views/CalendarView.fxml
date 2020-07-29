@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import controllers.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import customcontrols.WeekTextField?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.CalendarController"
+            styleClass="gridPaneWrapper">
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="25" >
+            <Label styleClass="title" text="Calender"/>
+            <Label id="label" fx:id="calendarTitle"/>
+            <TableView fx:id="calendarTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="appointmentDateCol" text="Date" minWidth="150" />
+                    <TableColumn fx:id="consultantNameCol" text="Consultant" minWidth="200" />
+                    <TableColumn fx:id="customerNameCol" text="Customer" minWidth="200" />
+                    <TableColumn fx:id="typeCol" text="Type" minWidth="200"/>
+                    <TableColumn fx:id="startTimeCol" text="Start Time" />
+                    <TableColumn fx:id="endTimeCol" text="End Time" />
+                    <TableColumn fx:id="descriptionCol" text="Description" minWidth="200"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+    <right>
+        <VBox styleClass="btnContainer" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label id="label" text="Filter By:" />
+            <Label text="Month" />
+            <ComboBox fx:id="monthsComboBox" onAction="#filterByMonth" prefWidth="150"/>
+            <Label text="Week" />
+            <HBox>
+                <WeekTextField fx:id="weekTextField"  prefWidth="150" />
+            </HBox>
+            <Button onAction="#clearFilter" maxWidth="Infinity" text="Clear Filters"/>
+        </VBox>
+    </right>
+    <stylesheets>
+        <URL value="@../css/globalStyles.css"/>
+        <URL value="@../css/customerSceneStyles.css" />
+    </stylesheets>
+</BorderPane>

@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class SceneManager {
+public class SceneManager<Controller> {
 
     private static HashMap<String, JavaFXScene<?>> scenes; //Holds list of scenes
     private static Stage primaryStage;
@@ -86,6 +86,9 @@ public class SceneManager {
     public static Pane getSceneRoot(String key){
         return scenes.get(key).getRoot();
     }
+    public static JavaFXScene<?> getScene(String key){
+        return scenes.get(key);
+    }
 
     //Exceptions
     public static class MissingScene extends Exception{
@@ -98,4 +101,6 @@ public class SceneManager {
             super("Scene by that name has already been loaded!");
         }
     }
+
+
 }

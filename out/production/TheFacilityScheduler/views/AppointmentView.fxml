@@ -10,18 +10,21 @@
             fx:controller="controllers.AppointmentController"
             styleClass="gridPaneWrapper">
     <center>
-        <TableView fx:id="appointmentTable" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-            <columns>
-                <TableColumn fx:id="appointmentId" text="ID" minWidth="75" />
-                <TableColumn fx:id="consultant" text="Consultant" minWidth="200" />
-                <TableColumn fx:id="customer" text="Customer" minWidth="200"/>
-                <TableColumn fx:id="title" text="Title" minWidth="250" />
-                <TableColumn fx:id="desc" text="Description" minWidth="250" />
-                <TableColumn fx:id="type" text="Type" minWidth="150" />
-                <TableColumn fx:id="start" text="Start Time" minWidth="250" />
-                <TableColumn fx:id="end" text="End Time" minWidth="250" />
-            </columns>
-        </TableView>
+        <VBox spacing="50" alignment="TOP_CENTER">
+            <Label styleClass="title" text="Appointments"/>
+            <TableView fx:id="appointmentTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="appointmentId" text="ID" minWidth="75" />
+                    <TableColumn fx:id="consultant" text="Consultant" minWidth="200" />
+                    <TableColumn fx:id="customer" text="Customer" minWidth="200"/>
+                    <TableColumn fx:id="title" text="Title" minWidth="250" />
+                    <TableColumn fx:id="desc" text="Description" minWidth="250" />
+                    <TableColumn fx:id="type" text="Type" minWidth="150" />
+                    <TableColumn fx:id="start" text="Start Time" minWidth="250" />
+                    <TableColumn fx:id="end" text="End Time" minWidth="250" />
+                </columns>
+            </TableView>
+        </VBox>
     </center>
     <right>
         <VBox styleClass="btnContainer" GridPane.columnIndex="1" GridPane.rowIndex="1">

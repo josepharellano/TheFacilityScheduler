@@ -37,7 +37,7 @@ public class Main extends Application {
         //Create a Login Screen to be used with the sceneManager
         JavaFXScene<LoginController> loginView= new JavaFXScene<>("loginView","LoginView.fxml");
         JavaFXScene<CustomerController> customerView= new JavaFXScene<>("customerView","CustomerView.fxml");
-        JavaFXScene<CalenderController> calenderView = new JavaFXScene<>("calenderView","CalenderView.fxml");
+        JavaFXScene<CalendarController> calenderView = new JavaFXScene<>("calendarView","CalendarView.fxml");
         JavaFXScene<MainController> mainView= new JavaFXScene<>("mainView","MainView.fxml");
         JavaFXScene<AppointmentController> appointmentView= new JavaFXScene<>("appointmentView","AppointmentView.fxml");
 

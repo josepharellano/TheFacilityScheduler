@@ -1,24 +1,18 @@
-package controllers;
+package customcontrols;
 
-import javafx.beans.NamedArg;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import models.IModel;
-
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AutoCompleteTextField<T extends IModel> extends TextField {
 
-    private ContextMenu suggestionsMenu;
+    private final ContextMenu suggestionsMenu;
     private T selection;
     private ObservableList<T> data;
 
