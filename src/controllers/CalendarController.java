@@ -175,11 +175,11 @@ public class CalendarController implements Initializable {
 
     //Removes filters from calendar data.
     public void clearFilter() {
-        appointments.setPredicate(null);
         monthsComboBox.getSelectionModel().clearSelection();
         weekTextField.setText("");
         calendarTable.refresh();
         calendarTitle.setText("All Appointments");
+        appointments.setPredicate(null);
     }
 
 

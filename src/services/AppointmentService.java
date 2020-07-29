@@ -11,7 +11,7 @@ import utilities.Exceptions;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -63,6 +63,12 @@ public class AppointmentService extends Service<Appointment> {
         }
     }
 
+    public List<Appointment> getAppointmentsByConsultant(int consultantId){
+        return this.data.values().stream().filter(item->{
+            return item.getUser()== consultantId;
+        }).collect(Collectors.toList());
+    }
+
     /**
      * Validates appointment to ensure it can be placed into database.
      * @param appointment
@@ -73,7 +79,7 @@ public class AppointmentService extends Service<Appointment> {
     private void validateAppointmentInput(Appointment appointment) throws SQLException, Exceptions.AppointmentsOverlap, Exceptions.EmptyInputValue, Exceptions.InvalidEndDateTime {
         //Ensure Appointment is during regular business hours
         System.out.println(appointment.getEnd().getHour());
-        if(appointment.getStart().getHour() < 8 || appointment.getEnd().getHour() > 17) throw new Exceptions.EmptyInputValue("Appointment must be during operation hours.\n 8:00 AM - 5:00PM");
+        if(appointment.getStart().getHour() < 8 || appointment.getEnd().getHour() > 20) throw new Exceptions.EmptyInputValue("Appointment must be during operation hours.\n 8:00 AM - 5:00PM");
 
         //Get current user
         User user = UserService.getSessionUser();

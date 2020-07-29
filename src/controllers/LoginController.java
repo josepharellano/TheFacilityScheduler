@@ -44,6 +44,12 @@ public class LoginController implements Initializable {
 
             //If successful load next screen.
             SceneManager.setScene("mainView");
+            //Run scene loaded instructions
+            MainController controller = (MainController) SceneManager.getScene("mainView").getController();
+            //Checks for appointment within 15 minutes of logging on.
+            controller.checkForAppointment();
+
+            //Log user log
 
         }catch(Exceptions.InvalidUserNameEx ex){
             errorStatus.setText(invalidUserName);

@@ -83,13 +83,12 @@ public class EditAppointmentController implements Initializable {
         startMinuteTimeSpinner.increment(start.getMinute()/ Constants.APPOINT_MINUTE_INCREMENTS);
         endMinuteTimeSpinner.increment(end.getMinute()/Constants.APPOINT_MINUTE_INCREMENTS);
 
-        if(start.getHour() == 12){
-
+        if(start.getHour() >= 12){
             startAmPmTimeSpinner.increment();
         }else{
             startAmPmTimeSpinner.decrement();
         }
-        if(end.getHour() > 12){
+        if(end.getHour() >= 12){
             endAmPmTimeSpinner.increment();
         }else{
             endAmPmTimeSpinner.decrement();

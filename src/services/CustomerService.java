@@ -105,5 +105,9 @@ public class CustomerService extends Service<Customer> {
         }
     }
 
+    public Customer getCustomerFromID(int id){
+        return this.data.get(id);
+    }
+
 
 }
