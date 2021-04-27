@@ -15,3 +15,7 @@ Develope an Consultant scheduling program for a global consulting organization t
 - Users must have the ability to generate the following reports: consultant schedule, number of appointment types by month
 - Administrators must be able to track user activity by recording timestamps in a user login file.
   
+## Design Patterns
+
+### Data Access Object Design Pattern
+  - 
