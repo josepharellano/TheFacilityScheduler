@@ -18,4 +18,10 @@ Develope an Consultant scheduling program for a global consulting organization t
 ## Design Patterns
 
 ### Data Access Object Design Pattern
-  - 
+By using the DAO design pattern the storage layer decoupled from the other componenets of the software.  This allows the storage mechanism to be switched out easily without having to modify the other existing components.
+
+### Singleton Pattern
+-  Each service is set up as a singleton to ensure their is only one source of data being manipulated at a given moment.
+
+### Factory Pattern
+- ServiceFactory.getService returns a singleton of the requested service.
